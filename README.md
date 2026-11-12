@@ -9,9 +9,9 @@ Check a job description against your own resumes and get an honest, explainable 
 
 Your resumes never leave your computer. The only outbound request the tool makes is fetching a job-posting URL that you type in yourself.
 
-![JD Fit Checker demo: the Check a JD tab showing a verdict, fit score and keyword match for the demo profile](docs/screenshot.png)
+![JD Fit Checker on the Demo profile: the Check a JD results with the Apply as-is verdict, baseline fit 98% against threshold 75%, direction and level checks, and the must-have gates table](docs/screenshot.png)
 
-<!-- Maintainer: add a screenshot of the Demo profile (Check a JD tab after clicking Analyze on a sample JD) at docs/screenshot.png. Use only the demo profile so no personal data appears in the image. -->
+*A sample job description checked against the fictional Demo profile: verdict first, then every check behind it.*
 
 ## Quick start (no typing needed)
 
@@ -80,12 +80,24 @@ The first start on Windows or macOS may show a one-time security prompt because 
 - Resume repository: every resume with its type (base, submitted copy, variant), lineage, staleness and recency.
 - My evidence: add skills and achievements you can honestly claim. The tool then offers a pick list (with Select all) to update the resumes that lack them. Submitted copies are never edited: when included, they are copied once into a new `_v2` file.
 
+![Resume repository tab on the Demo profile: a table of the demo resumes with type (base, submitted copy, variant), derived-from, modified date, applied-to and missing evidence](docs/resume-repository.png)
+
+*Resume repository: which resume is a base, a submitted copy or a variant, where it was sent and what evidence it lacks.*
+
+![My evidence tab on the Demo profile: the evidence bank with each claim, the date it was added and the base resumes lacking it](docs/my-evidence.png)
+
+*My evidence: the honest claims the tool may use, and which base resumes do not mention them yet.*
+
 ### History, stats, compare and calibration
 
 - History: your last 500 checks in this profile.
 - Stats: screening and application counts, trends and the most common gaps, for the last 7 days, 30 days or all time.
 - Compare two JDs: two postings side by side.
 - Calibration: sample roles scored against expected results, so you can see how the scoring behaves.
+
+![Stats tab on the Demo profile: totals for screened, applied, pending, held, repeat and skipped items, skips by reason, repeat rate and a weekly bar chart](docs/stats.png)
+
+*Stats: what you screened and applied to, why roles were skipped, and the weekly trend.*
 
 ### Built-in Help
 
@@ -300,6 +312,10 @@ On macOS, folders starting with a dot are hidden in Finder. Press Cmd+Shift+. (p
 
 The Help tab in the tool has the same steps with "Go there" buttons.
 
+![Help tab: the quick start for a new user, eight numbered steps each with a Go there button, followed by Reading the results](docs/help-walkthrough.png)
+
+*The built-in Help walkthrough. Each "Go there" button jumps to the right place in the tool.*
+
 ### 1. Start the tool and try the Demo profile
 
 1. Double-click the launcher in the tool folder (`Start JD Fit Checker.cmd` on Windows, `Start JD Fit Checker.command` on macOS, `start.sh` on Linux; see [Running the tool](#running-the-tool)). The browser opens the tool. Keep the launcher window open.
@@ -383,6 +399,10 @@ Step 5 of 5 is optional: paste an existing application log (CSV with a header ro
 | 12 | Interview prep | Likely questions with honest bridges for gaps. |
 | 13 | Log entry draft | A line for your log, with a Copy button. |
 
+![Gates and % fit cards for a demo job: each must-have with required or preferred status and evidence, then the fit formula with weight, score, points and reason per component](docs/fit-breakdown.png)
+
+*Gates and % fit: every requirement with its evidence, and how each component adds up to the score.*
+
 ### Colour legend
 
 | Colour | In the keyword highlights | In status labels |
@@ -392,6 +412,10 @@ Step 5 of 5 is optional: paste an existing application log (CSV with a header ro
 | Red (dotted underline) | Missing and not supported | Not met, or Skip |
 | Violet (outlined) | Red flag in the job description | |
 | Blue | | Information only (for example, unknown) |
+
+![Keyword match card: matched and missing keyword lists, keyword pills coloured matched, supportable or unsupported, and the job description highlighted with the colour legend](docs/keyword-match.png)
+
+*Keyword match: green is matched, amber is missing but supportable from your evidence, red is missing and not supported.*
 
 ### Verdicts
 
@@ -428,6 +452,10 @@ The tool folder itself contains only code, generic rules and the demo. Nothing y
 - Your password is never stored. The tool keeps only a scrypt hash of it.
 - While protected, the tool's own files for that profile (settings, history, repository, log, calibration samples) are encrypted on disk with AES-256-GCM, using a key derived from your password.
 - Use Unlock in the sidebar to open it. It locks again after 30 minutes without activity, when you click Lock, or when the server restarts.
+
+![A password-protected sample profile shown as locked in the sidebar, with the Unlock profile dialog asking for its password](docs/profile-lock.png)
+
+*A protected profile stays locked until you enter its password.*
 - After 5 wrong passwords, unlocking is paused for 60 seconds, doubling with each further lockout up to 15 minutes.
 
 ### Security model and limits
@@ -581,6 +609,14 @@ node scripts/ui-smoke.cjs --attach http://127.0.0.1:4317   # read-only probe of 
 ```
 
 Use `--edge <path>` or `--firefox <path>` if the browser is not found automatically. Exit code 0 means every scenario passed, 1 a failure, 2 no browser could run.
+
+### Regenerating the README screenshots
+
+`scripts/capture-screenshots.cjs` recreates the images in `docs/` from the Demo profile only. It starts its own server on port 4471 with a temporary, empty profile store, drives headless Microsoft Edge at 1440x900, refuses any view whose visible text matches the deny-list or your user name, and cleans everything up. Look at every image before publishing it.
+
+```
+node scripts/capture-screenshots.cjs [--out docs] [--port 4471] [--edge <path>]
+```
 
 ### Environment variables
 
