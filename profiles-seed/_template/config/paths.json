@@ -1,0 +1,18 @@
+{
+  "_comment": "Relative paths resolve against this profile folder. null = not used by this profile.",
+  "resumeDir": "resumes",
+  "resumeFilePrefix": "",
+  "baseMap": null,
+  "checklist": null,
+  "tailorScript": null,
+  "workSamplesDir": null,
+  "historyFile": "data/history.json",
+  "repoFile": "data/resume-repo.json",
+  "applicationsFile": "data/applications.json",
+  "uploadsFile": "data/uploads.json",
+  "tailorRunsDir": "tailor-runs",
+  "tailorReportDir": "reports",
+  "fixturesDir": "fixtures/jds",
+  "generator": "builtin",
+  "log": "applications"
+}

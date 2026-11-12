@@ -1,0 +1,40 @@
+{
+  "id": "litware-checkout",
+  "company": "Litware",
+  "title": "Product Manager, Checkout",
+  "logged": "Synthetic demo JD. Expected values were set from the first run of the tool on 2026-11 after a plausibility check (not a real historical judgment). Strong fit: checkout PM, every must-have is on the general base.",
+  "expected": {
+    "historicalVerdict": "apply_as_is",
+    "historicalFit": 90,
+    "base": "PM_BASE_General",
+    "rankGroup": 1,
+    "verdictAtT55": [
+      "apply_as_is"
+    ],
+    "flags": {
+      "directionClass": "target",
+      "directionId": "pm",
+      "level": "ok"
+    }
+  },
+  "lines": [
+    "Product Manager, Checkout",
+    "Company: Litware",
+    "Location: Bengaluru",
+    "About the role",
+    "You will own the checkout experience for our e-commerce marketplace and work with engineering, design and analytics.",
+    "Responsibilities",
+    "- Own the product roadmap for checkout and write PRDs with clear acceptance criteria.",
+    "- Run product discovery and customer interviews to find the causes of drop-off.",
+    "- Design and analyse A/B tests to improve conversion.",
+    "- Prioritize the backlog in Jira with engineering.",
+    "- Build dashboards in SQL and Tableau to track funnel metrics.",
+    "Requirements",
+    "- 2-4 years of product management experience in e-commerce or consumer products.",
+    "- Strong SQL and data analysis skills.",
+    "- Experience with experimentation and A/B testing.",
+    "- Clear communication with stakeholders.",
+    "Nice to have",
+    "- Python for analysis."
+  ]
+}

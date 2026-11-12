@@ -1,0 +1,33 @@
+{
+  "id": "acme-payments-repeat",
+  "company": "Acme Payments",
+  "title": "Product Manager, Payments",
+  "logged": "Synthetic demo JD. Expected values were set from the first run of the tool on 2026-11 after a plausibility check (not a real historical judgment). Repeat: Acme Payments already received PM_Acme_Payments (data/applications.json, 2026-07-10). Calibration ignores history, so it scores as a strong payments fit here; with history the verdict is skip_repeat.",
+  "expected": {
+    "historicalVerdict": "skip_repeat",
+    "historicalFit": 90,
+    "base": "PM_Fintech_Payments",
+    "submittedTop": "PM_Acme_Payments",
+    "rankGroup": 1,
+    "verdictAtT55": [
+      "apply_as_is"
+    ],
+    "flags": {
+      "directionId": "pm",
+      "level": "ok"
+    }
+  },
+  "lines": [
+    "Product Manager, Payments",
+    "Company: Acme Payments",
+    "Location: Bengaluru",
+    "Responsibilities",
+    "- Own the payments roadmap across UPI, cards and payment retries.",
+    "- Work with the payment gateway team to reduce failed payments.",
+    "- Write PRDs and run A/B tests on checkout.",
+    "Requirements",
+    "- 2+ years of product management in payments or fintech.",
+    "- SQL and data analysis skills.",
+    "- Clear communication with stakeholders."
+  ]
+}

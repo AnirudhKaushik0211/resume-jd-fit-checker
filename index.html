@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JD Fit Checker</title>
+<style>
+  :root {
+    --navy: #0b1f3a; --blue: #1d4ed8; --blue-soft: #eaf2ff;
+    --green: #166534; --green-soft: #ecfdf3; --green-line: #86efac;
+    --amber: #92400e; --amber-soft: #fff7ed; --amber-line: #fdba74;
+    --red: #9f1239; --red-soft: #fff1f2; --red-line: #fda4af;
+    --violet: #5b21b6; --violet-soft: #f5f3ff;
+    --ink: #172033; --muted: #475569; --line: #dfe6ef; --surface: #fff; --canvas: #f4f7fb;
+    --shadow: 0 10px 30px rgba(15, 39, 74, .08); --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; color: var(--ink); background: var(--canvas); font-family: "Segoe UI", system-ui, -apple-system, sans-serif; font-size: 14px; line-height: 1.45; }
+  button, input, textarea, select { font: inherit; }
+  a { color: var(--blue); }
+  .skip-link { position: absolute; left: -999px; top: 0; background: #fff; padding: 8px; z-index: 100; }
+  .skip-link:focus { left: 8px; }
+  :focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
+  .app { display: grid; grid-template-columns: 270px minmax(0, 1fr); min-height: 100vh; }
+  .sidebar { background: linear-gradient(180deg, var(--navy), #071426 80%); color: #fff; padding: 22px 16px; position: sticky; top: 0; height: 100vh; overflow: auto; }
+  .brand { display: flex; gap: 10px; align-items: center; margin-bottom: 20px; }
+  .brand-mark { width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; background: linear-gradient(135deg, #60a5fa, #2563eb); font-weight: 800; }
+  .brand strong { display: block; } .brand span { color: #c7d6ea; font-size: 12px; }
+  .side-box { background: rgba(255,255,255,.07); border-radius: 10px; padding: 12px; margin-bottom: 12px; font-size: 12px; color: #dbe7f6; }
+  .side-box label { color: #fff; }
+  .side-box input[type=range] { width: 100%; }
+  .side-box input[type=number] { width: 70px; }
+  .side-box button { background: #1e3a8a; color: #fff; border: 1px solid #93c5fd; border-radius: 8px; padding: 4px 10px; }
+  .tabs { display: flex; flex-direction: column; gap: 4px; margin-bottom: 14px; }
+  .tabs [role=tab] { text-align: left; background: transparent; color: #e2e8f0; border: 0; border-radius: 8px; padding: 9px 12px; }
+  .tabs [role=tab][aria-selected=true] { background: #1e40af; color: #fff; font-weight: 700; }
+  main { min-width: 0; padding: 24px 30px 60px; max-width: 1400px; }
+  h1 { font-size: 22px; margin: 0 0 4px; } h2 { font-size: 16px; margin: 0 0 10px; } h3 { font-size: 14px; margin: 12px 0 6px; }
+  .sub { color: var(--muted); margin: 0 0 18px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 18px; margin-bottom: 16px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  label { display: block; font-weight: 700; font-size: 12px; margin-bottom: 4px; color: #1e293b; }
+  input[type=text], input[type=url], textarea { width: 100%; border: 1px solid #94a3b8; border-radius: 8px; padding: 8px 10px; background: #fff; color: var(--ink); }
+  textarea { min-height: 220px; resize: vertical; font-family: Consolas, ui-monospace, monospace; font-size: 12.5px; }
+  .row { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
+  .row > div { flex: 1; min-width: 180px; }
+  .btn { background: var(--blue); color: #fff; border: 0; border-radius: 8px; padding: 9px 16px; font-weight: 700; }
+  .btn.secondary { background: #fff; color: var(--blue); border: 1px solid var(--blue); }
+  .btn.danger { background: var(--red); }
+  .btn:disabled { opacity: .55; cursor: not-allowed; }
+  .muted { color: var(--muted); } .small { font-size: 12px; }
+  .pill { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 700; border: 1px solid; }
+  .ok { color: var(--green); background: var(--green-soft); border-color: var(--green-line); }
+  .warn { color: var(--amber); background: var(--amber-soft); border-color: var(--amber-line); }
+  .bad { color: var(--red); background: var(--red-soft); border-color: var(--red-line); }
+  .info { color: var(--blue); background: var(--blue-soft); border-color: #93c5fd; }
+  .verdict-big { font-size: 22px; font-weight: 800; }
+  .scorebox { display: flex; gap: 12px; flex-wrap: wrap; margin: 10px 0; }
+  .scorebox div { border: 1px solid var(--line); border-radius: 10px; padding: 8px 14px; min-width: 120px; }
+  .scorebox b { display: block; font-size: 22px; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }
+  th { background: #f8fafc; font-size: 12px; }
+  pre { background: #0f172a; color: #e2e8f0; padding: 10px; border-radius: 8px; overflow: auto; white-space: pre-wrap; font-size: 12px; }
+  ul { margin: 4px 0 8px 18px; padding: 0; } li { margin: 2px 0; }
+  .jdview { white-space: pre-wrap; border: 1px solid var(--line); border-radius: 8px; padding: 10px; max-height: 420px; overflow: auto; background: #fff; font-size: 13px; }
+  .hl-matched { background: var(--green-soft); border-bottom: 2px solid var(--green); }
+  .hl-supportable { background: var(--amber-soft); border-bottom: 2px dashed var(--amber); }
+  .hl-unsupported { background: var(--red-soft); border-bottom: 2px dotted var(--red); }
+  .hl-redflag { background: var(--violet-soft); outline: 2px solid var(--violet); color: var(--violet); font-weight: 700; }
+  .legend span { margin-right: 12px; padding: 1px 4px; }
+  .options { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .options button[aria-pressed=true] { background: var(--navy); color: #fff; }
+  input[type=password] { width: 100%; border: 1px solid #94a3b8; border-radius: 8px; padding: 8px 10px; background: #fff; color: var(--ink); margin-bottom: 8px; }
+  fieldset { border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; margin: 0; }
+  legend { font-weight: 700; padding: 0 4px; }
+  dialog { border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px 20px; width: min(420px, 92vw); color: var(--ink); }
+  dialog::backdrop { background: rgba(11, 31, 58, .55); }
+  #unlockErr { color: var(--red); }
+  .side-box .jdfc-linkbtn { background: none; border: 0; padding: 0; color: #bfdbfe; text-decoration: underline; cursor: pointer; font-size: 12px; }
+  .jdfc-walk li { margin: 8px 0; }
+  .jdfc-walk .btn { padding: 3px 10px; margin-left: 6px; font-size: 12px; }
+  .hidden { display: none !important; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  @media (max-width: 900px) { .app { grid-template-columns: 1fr; } .sidebar { position: static; height: auto; } .grid2 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#jdfcMain">Skip to content</a>
+<div class="app">
+  <aside class="sidebar" aria-label="Navigation and settings">
+    <div class="brand"><div class="brand-mark" aria-hidden="true">JD</div><div><strong>JD Fit Checker</strong><span>Local prototype · 127.0.0.1</span></div></div>
+    <div class="side-box">
+      <label for="jdfcProfileSwitch">Profile</label>
+      <select id="jdfcProfileSwitch" aria-describedby="profileHelp" style="width:100%"></select>
+      <p id="profileHelp" class="small">Each profile has its own resumes, history and log. Switching clears the current results.</p>
+      <p id="lockState" class="small" aria-live="polite"></p>
+      <div class="options" style="margin:0 0 8px">
+        <button id="unlockBtn" class="hidden" type="button">Unlock</button>
+        <button id="lockBtn" class="hidden" type="button">Lock</button>
+      </div>
+      <button id="demoReset" class="btn secondary hidden" type="button" aria-describedby="demoResetHelp">Reset demo</button>
+      <p id="demoResetHelp" class="small hidden">Restores the demo profile's resumes, history and log to the original sample data.</p>
+      <button id="createProfileBtn" class="btn secondary" type="button" aria-controls="jdfcPanel-onboard" style="margin-top:8px">Create profile</button>
+      <p style="margin:8px 0 0"><button id="jdfcHelpStart" class="jdfc-linkbtn" type="button" aria-controls="jdfcPanel-help">New here? Start the walkthrough</button></p>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Views" aria-orientation="vertical">
+      <button role="tab" id="jdfcTab-check" aria-controls="jdfcPanel-check" aria-selected="true">Check a JD</button>
+      <button role="tab" id="jdfcTab-compare" aria-controls="jdfcPanel-compare" aria-selected="false" tabindex="-1">Compare two JDs</button>
+      <button role="tab" id="jdfcTab-history" aria-controls="jdfcPanel-history" aria-selected="false" tabindex="-1">History</button>
+      <button role="tab" id="jdfcTab-calibration" aria-controls="jdfcPanel-calibration" aria-selected="false" tabindex="-1">Calibration</button>
+      <button role="tab" id="jdfcTab-repo" aria-controls="jdfcPanel-repo" aria-selected="false" tabindex="-1">Resume repository</button>
+      <button role="tab" id="jdfcTab-evidence" aria-controls="jdfcPanel-evidence" aria-selected="false" tabindex="-1">My evidence</button>
+      <button role="tab" id="jdfcTab-stats" aria-controls="jdfcPanel-stats" aria-selected="false" tabindex="-1">Stats</button>
+      <button role="tab" id="jdfcTab-profile" aria-controls="jdfcPanel-profile" aria-selected="false" tabindex="-1">Profile settings</button>
+      <button role="tab" id="jdfcTab-help" aria-controls="jdfcPanel-help" aria-selected="false" tabindex="-1">Help</button>
+    </div>
+    <div class="side-box">
+      <label for="thrRange">Apply threshold (strictness): <span id="thrValue">75</span>%</label>
+      <input type="range" id="thrRange" min="40" max="95" step="5" value="75" aria-describedby="thrHelp">
+      <div class="row" style="margin-top:6px">
+        <div style="flex:0"><label for="thrNum" class="sr-only">Threshold value</label><input type="number" id="thrNum" min="40" max="95" step="5" value="75"></div>
+        <div style="flex:0"><button type="button" id="thrReset">Reset to 75</button></div>
+      </div>
+      <p id="thrHelp" class="small">Apply when fit ≥ T. Changing it re-scores the current JD instantly (no re-fetch). Saved in this browser.</p>
+    </div>
+    <div class="side-box" id="healthBox" aria-live="polite">Loading…</div>
+    <div class="side-box" id="pendingBox" aria-live="polite"><b>Pending applications</b><div id="pendingList" class="small">None.</div></div>
+    <div class="side-box small">Only outbound request: a GET to a job URL you paste. Existing resumes are never edited by analysis; new tailored files are created only when you click Generate.</div>
+  </aside>
+
+  <main id="jdfcMain">
+    <div id="jdfcStatus" class="sr-only" aria-live="polite"></div>
+    <p id="initErr" class="card small warn hidden" role="alert"></p>
+
+    <section id="jdfcPanel-check" role="tabpanel" aria-labelledby="jdfcTab-check">
+      <h1>Check a job description</h1>
+      <p class="sub">Paste the JD text or a posting link. Scoring is deterministic and every number shows its why.</p>
+      <div class="card">
+        <div class="row">
+          <div><label for="jdUrl">Job posting URL (optional)</label><input type="url" id="jdUrl" placeholder="https://boards.greenhouse.io/company/jobs/123"></div>
+          <div style="flex:0"><button class="btn secondary" type="button" id="fetchBtn">Fetch JD</button></div>
+        </div>
+        <p id="fetchMsg" class="small" aria-live="polite"></p>
+        <label for="jdText">JD text</label>
+        <textarea id="jdText" placeholder="Paste the full job description here"></textarea>
+        <div class="row" style="margin-top:10px">
+          <div><label for="jdCompany">Company (optional; detected from the JD)</label><input type="text" id="jdCompany"></div>
+          <div><label for="jdTitle">Role title (optional; first line by default)</label><input type="text" id="jdTitle"></div>
+        </div>
+        <div class="row" style="margin-top:12px">
+          <div style="flex:0"><button class="btn" type="button" id="analyzeBtn" aria-describedby="analyzeMsg">Analyze</button></div>
+          <div><label><input type="checkbox" id="jdfcIgnoreHistory"> Ignore checklist / history (seen-before off)</label></div>
+        </div>
+        <p id="analyzeMsg" class="small" aria-live="polite"></p>
+      </div>
+      <div id="jdfcResults" tabindex="-1"></div>
+    </section>
+
+    <section id="jdfcPanel-compare" role="tabpanel" aria-labelledby="jdfcTab-compare" class="hidden">
+      <h1>Compare two JDs</h1>
+      <div class="grid2">
+        <div class="card"><label for="cmpA">JD A</label><textarea id="cmpA"></textarea></div>
+        <div class="card"><label for="cmpB">JD B</label><textarea id="cmpB"></textarea></div>
+      </div>
+      <button class="btn" type="button" id="cmpBtn">Compare</button>
+      <div id="cmpOut" style="margin-top:14px"></div>
+    </section>
+
+    <section id="jdfcPanel-history" role="tabpanel" aria-labelledby="jdfcTab-history" class="hidden">
+      <h1>History of checks</h1>
+      <p class="sub">Stored locally in this profile's data\history.json (last 500).</p>
+      <button class="btn secondary" type="button" id="histBtn">Refresh</button>
+      <div id="histOut" class="card" style="margin-top:12px"></div>
+    </section>
+
+    <section id="jdfcPanel-repo" role="tabpanel" aria-labelledby="jdfcTab-repo" class="hidden">
+      <h1>Resume repository</h1>
+      <p class="sub">This profile's data\resume-repo.json: type, lineage, recency, applied-to and missing evidence for every resume (backups skipped).</p>
+      <button class="btn secondary" type="button" id="repoBtn">Refresh</button>
+      <div id="repoOut" class="card" style="margin-top:12px"></div>
+    </section>
+
+    <section id="jdfcPanel-evidence" role="tabpanel" aria-labelledby="jdfcTab-evidence" class="hidden">
+      <h1>My evidence</h1>
+      <p class="sub">Honest claims the tool may use. New items are checked by the honesty guard, dated, and preferred over older overlapping items.</p>
+      <div class="card">
+        <h2>Add an evidence item</h2>
+        <div class="row">
+          <div><label for="evId">Id (a-z, 0-9, -)</label><input type="text" id="evId"></div>
+          <div><label for="evSkill">Skill-line label (optional)</label><input type="text" id="evSkill"></div>
+          <div><label for="evDate">Date added</label><input type="text" id="evDate" placeholder="YYYY-MM-DD"></div>
+        </div>
+        <label for="evClaim" style="margin-top:8px">Claim wording (exactly what you can say)</label><input type="text" id="evClaim">
+        <div class="row" style="margin-top:8px">
+          <div><label for="evKeywords">Keyword ids it supports (comma separated)</label><input type="text" id="evKeywords" placeholder="experimentation, sql"></div>
+          <div><label for="evDetect">Detect pattern in a resume (regex, optional)</label><input type="text" id="evDetect"></div>
+          <div><label for="evFamilies">Applies to role families (comma separated, optional)</label><input type="text" id="evFamilies"></div>
+        </div>
+        <button class="btn" type="button" id="evAdd" style="margin-top:10px">Add evidence</button>
+        <p id="evMsg" class="small" aria-live="polite"></p>
+      </div>
+      <div id="evOut" class="card"></div>
+      <div id="pickOut" class="card hidden" aria-live="polite"></div>
+    </section>
+
+    <section id="jdfcPanel-stats" role="tabpanel" aria-labelledby="jdfcTab-stats" class="hidden">
+      <h1>Stats</h1>
+      <p class="sub">Read-only, from this profile's log (checklist or applications), data\history.json and data\resume-repo.json. Undated checklist entries are counted in an "undated" bucket.</p>
+      <div class="row"><div style="flex:0"><label for="statsRange">Range</label><select id="statsRange"><option value="7d">Last 7 days</option><option value="30d">Last 30 days</option><option value="all" selected>All time</option></select></div>
+      <div style="flex:0"><button class="btn secondary" type="button" id="statsBtn">Refresh</button></div></div>
+      <div id="statsOut" style="margin-top:12px"></div>
+    </section>
+
+    <section id="jdfcPanel-calibration" role="tabpanel" aria-labelledby="jdfcTab-calibration" class="hidden">
+      <h1>Calibration</h1>
+      <p class="sub">Synthetic fixtures of past roles: historical hand estimate vs strict score, verdict at your threshold and at T=55 (historical setting).</p>
+      <button class="btn secondary" type="button" id="calBtn">Run calibration</button>
+      <div id="calOut" class="card" style="margin-top:12px"></div>
+    </section>
+
+    <section id="jdfcPanel-profile" role="tabpanel" aria-labelledby="jdfcTab-profile" class="hidden">
+      <h1>Profile settings</h1>
+      <p class="sub" id="profSettingsSub">Password protection and reset for the selected profile.</p>
+      <p id="profDemoNote" class="small hidden">The demo profile holds synthetic sample data only: it cannot be password protected. Use "Reset demo" in the sidebar to restore it.</p>
+      <div class="card" id="pwCard">
+        <form id="pwForm" novalidate>
+          <fieldset>
+            <legend id="pwLegend">Set a password</legend>
+            <p class="small" id="pwHelp">Encrypts this profile's settings, history, resume repository and application log on disk (AES-256-GCM). Resume .docx files, linked files outside the profile folder and transient tailor runs are not encrypted. There is no password recovery.</p>
+            <div id="pwCurrentWrap" class="hidden">
+              <label for="pwCurrent">Current password</label>
+              <input type="password" id="pwCurrent" autocomplete="current-password" maxlength="1024">
+            </div>
+            <label for="pwNew">New password</label>
+            <input type="password" id="pwNew" autocomplete="new-password" maxlength="1024" aria-describedby="pwHelp">
+            <label for="pwConfirm">Confirm new password</label>
+            <input type="password" id="pwConfirm" autocomplete="new-password" maxlength="1024">
+            <div class="options"><button class="btn" type="submit" id="pwSubmit">Set password</button></div>
+            <p id="pwMsg" class="small" role="status" aria-live="polite"></p>
+          </fieldset>
+        </form>
+      </div>
+      <div class="card" id="resetCard">
+        <form id="resetForm" novalidate>
+          <fieldset>
+            <legend>Reset profile</legend>
+            <p class="small" id="resetWarn"><b>Warning:</b> this permanently deletes the profile's settings, history, resume repository, application log and calibration fixtures and removes its password. Encrypted data cannot be recovered afterwards. Resume .docx files in the profile and linked files outside it are left untouched, but the links themselves (config\paths.json) are replaced by the empty template's paths: restore them from your own copy of paths.json (see README, "Security model and limits").</p>
+            <label for="resetConfirm">Type the profile id <span id="resetIdHint"></span> to confirm</label>
+            <input type="text" id="resetConfirm" autocomplete="off" spellcheck="false" aria-describedby="resetWarn">
+            <div class="options"><button class="btn danger" type="submit">Reset profile</button></div>
+            <p id="resetMsg" class="small" role="status" aria-live="polite"></p>
+          </fieldset>
+        </form>
+      </div>
+      <div class="card hidden" id="upCard">
+        <form id="upForm" novalidate>
+          <fieldset>
+            <legend>Upload new version</legend>
+            <p class="small" id="upHelp">A new upload in the same family becomes the default base; the older version is kept for lineage. Files are never overwritten. PDF is not supported yet: export to .docx or paste the text.</p>
+            <label for="upFile">Resume file (.docx)</label>
+            <input type="file" id="upFile" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" aria-describedby="upHelp">
+            <label for="upFamily">Role family (for example pm, analyst, ops)</label>
+            <input type="text" id="upFamily" value="general" autocomplete="off">
+            <label for="upPaste">Or paste the resume text (used when no file is chosen)</label>
+            <textarea id="upPaste"></textarea>
+            <div class="options"><button class="btn" type="submit">Upload</button></div>
+            <p id="upMsg" class="small" role="status" aria-live="polite"></p>
+          </fieldset>
+        </form>
+      </div>
+    </section>
+
+    <section id="jdfcPanel-help" role="tabpanel" aria-labelledby="jdfcTab-help" class="hidden">
+      <h1 id="jdfcHelpH" tabindex="-1">Help: how to use JD Fit Checker</h1>
+      <p class="small"><label style="display:inline;font-weight:400"><input type="checkbox" id="jdfcHelpOnStart"> Show Help on start</label></p>
+
+      <div class="card">
+        <h2 id="jdfcHelpWhat">What this tool does</h2>
+        <p>It screens a job description (JD) you paste against your own resume versions and gives an honest verdict, a fit %, a keyword (ATS-style) match and the closest resume to send. When it is worth it, it can generate a minimally tailored copy of that resume without inventing claims. It runs locally on this computer: your data stays on your machine.</p>
+      </div>
+
+      <div class="card">
+        <h2 id="jdfcHelpWalkH" tabindex="-1">Quick start for a new user</h2>
+        <ol class="jdfc-walk">
+          <li>Try the <b>Demo</b> profile (sidebar, Profile) and click Analyze on a sample JD to see a full result.
+            <button class="btn secondary jdfc-goto" type="button" data-jdfc-tab="check" data-jdfc-focus="jdfcProfileSwitch" aria-label="Go there: step 1, profile switcher">Go there</button></li>
+          <li>Create your profile with <b>Create profile</b>: a name and an optional password.
+            <button class="btn secondary jdfc-goto" type="button" data-jdfc-tab="onboard" data-jdfc-focus="obH1" aria-label="Go there: step 2, create profile">Go there</button></li>
+          <li>Upload your resume versions (.docx) or paste their text. PDF is not supported yet. New profiles do this in Create profile step 2; later versions go in Profile settings, "Upload new version".
+            <button class="btn secondary jdfc-goto" type="button" data-jdfc-tab="profile" data-jdfc-focus="upFile" data-jdfc-fallback="createProfileBtn" aria-label="Go there: step 3, upload resumes">Go there</button></li>
+          <li>Review the drafted profile (years, education, certifications, skills) and correct anything wrong (Create profile step 3).
+            <button class="btn secondary jdfc-goto" type="button" data-jdfc-tab="onboard" data-jdfc-focus="obH1" aria-label="Go there: step 4, review the draft">Go there</button></li>
+          <li>Set the directions to target or avoid, the seniority ceiling and the tailor band (default 20) in Create profile step 4. The apply threshold (default 75) can be changed at any time in the sidebar.
+            <button class="btn secondary jdfc-goto" type="button" data-jdfc-tab="check" data-jdfc-focus="thrRange" aria-label="Go there: step 5, apply threshold">Go there</button></li>
+          <li>Paste a JD (or a posting URL; LinkedIn and sites behind a login need pasted text) and click Analyze.
+            <button class="btn secondary jdfc-goto" type="button" data-jdfc-tab="check" data-jdfc-focus="jdText" aria-label="Go there: step 6, JD text">Go there</button></li>
+          <li>Read the verdict. If a tailored resume is offered, generate it, apply, then answer "Did you apply?" so the application is logged.
+            <button class="btn secondary jdfc-goto" type="button" data-jdfc-tab="check" data-jdfc-focus="jdfcResults" aria-label="Go there: step 7, results">Go there</button></li>
+          <li>Add new skills on <b>My evidence</b> as you gain them, then update the resumes you pick.
+            <button class="btn secondary jdfc-goto" type="button" data-jdfc-tab="evidence" data-jdfc-focus="evId" aria-label="Go there: step 8, my evidence">Go there</button></li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h2 id="jdfcHelpRead">Reading the results</h2>
+        <ol class="small">
+          <li><b>Seen before</b>: whether you already applied, skipped or held this company or role.</li>
+          <li><b>Verdict</b>: Apply, Tailor, Hold or Skip, with the scores behind it.</li>
+          <li><b>Direction check</b>: whether the role is in a direction you target or avoid.</li>
+          <li><b>Level check</b>: required years and seniority against your experience.</li>
+          <li><b>Gates</b>: must-have requirements (certifications, tools, domains) and whether you meet them.</li>
+          <li><b>% fit</b>: the score with a component-by-component breakdown and any penalties.</li>
+          <li><b>Keyword match</b>: ATS-style coverage, with the JD highlighted: <span class="hl-matched">matched</span>, <span class="hl-supportable">missing but supportable</span>, <span class="hl-unsupported">missing and not supported</span>, <span class="hl-redflag">red flag</span>.</li>
+          <li><b>Nearest base resume</b>: your closest resume to send, ranked with reasons.</li>
+          <li><b>Tailor decision</b>: whether honest edits are worth making, and the option to generate the tailored copy.</li>
+          <li><b>Suggested improvements</b>: what to add (backed by evidence), what NOT to claim (prepare for the interview instead) and work samples to attach.</li>
+          <li><b>Honesty guard</b>: checks every suggestion against your resume text and evidence.</li>
+          <li><b>Interview prep</b>: likely questions with honest bridges for the gaps.</li>
+          <li><b>Log entry</b>: a ready-made line for your application log.</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h2 id="jdfcHelpVerdicts">Verdicts and the threshold</h2>
+        <table id="jdfcHelpBands">
+          <caption id="jdfcHelpBandsCap" class="small" style="text-align:left;caption-side:top;padding-bottom:6px"></caption>
+          <thead><tr><th scope="col">Verdict</th><th scope="col">When</th></tr></thead>
+          <tbody id="jdfcHelpBandsBody"></tbody>
+        </table>
+        <p class="small muted">Honest edits are computed once, in a single pass: the tool never chases the threshold or inflates scores.</p>
+      </div>
+
+      <div class="card">
+        <h2 id="jdfcHelpTabs">Tabs</h2>
+        <ul class="small">
+          <li><b>Check a JD</b>: analyze one job description.</li>
+          <li><b>Compare two JDs</b>: two postings side by side.</li>
+          <li><b>History</b>: your past checks in this profile.</li>
+          <li><b>Calibration</b>: sample roles scored against their expected results, to check the scoring.</li>
+          <li><b>Resume repository</b>: every resume with its type (base, submitted copy, variant), lineage, staleness and recency (newer wins a tie).</li>
+          <li><b>My evidence</b>: add skills you can honestly claim; a pick list (with Select all) updates the resumes that lack one. Submitted copies are never edited: when included they are promoted once into a _v2 variant.</li>
+          <li><b>Stats</b>: screening and application counts, trends and common gaps.</li>
+          <li><b>Profile settings</b>: password, reset and uploading new resume versions.</li>
+          <li><b>Help</b>: this page.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2 id="jdfcHelpPrivacy">Profiles, passwords and privacy</h2>
+        <ul class="small">
+          <li>Each profile is separate: its own resumes, rules, history and log. Profiles are stored outside the tool folder, in <code>%USERPROFILE%\.jd-fit-checker\profiles\</code> (or under the folder set in JDFC_HOME). The server window shows the exact path when it starts.</li>
+          <li>A password locks the profile and encrypts the tool's own files for it on disk. An unlocked profile locks again after 30 minutes idle.</li>
+          <li>Honest limits: there is no recovery for a forgotten password (you would reset the profile); it does not protect against an administrator on the same computer; resume .docx files and linked files outside the profile folder are not encrypted.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2 id="jdfcHelpTrouble">Troubleshooting</h2>
+        <ul class="small">
+          <li>A button seems to do nothing: read the message right under it.</li>
+          <li>"Profile is locked": use Unlock in the sidebar.</li>
+          <li>"Paste a JD or a posting URL": the JD box is empty.</li>
+          <li>"Analyze timed out" or "Fetch timed out": the server may be busy or stopped; check the server window, then try again.</li>
+          <li>After an update, press Ctrl+F5 to reload the page.</li>
+          <li>Fetching a URL says to paste instead (for example LinkedIn): copy the JD text from the page and paste it.</li>
+          <li>"Part of the page failed to load" banner: press Ctrl+F5; details are in the browser console (F12).</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2 id="jdfcHelpFaq">FAQ</h2>
+        <dl class="small">
+          <dt><b>Why is my fit lower than I expected?</b></dt>
+          <dd>Scoring is strict, like a recruiter's first screen. If it is too strict for you, adjust the apply threshold in the sidebar.</dd>
+          <dt><b>Why won't it add a skill I have?</b></dt>
+          <dd>Add it on My evidence first. The honesty guard only uses your resume text and your evidence.</dd>
+          <dt><b>Does it send my resume anywhere?</b></dt>
+          <dd>No. The only outbound request is fetching a posting URL you enter.</dd>
+          <dt><b>Can I use it on another computer?</b></dt>
+          <dd>Yes: copy the tool folder and, separately, your profile folder.</dd>
+        </dl>
+      </div>
+    </section>
+
+    <section id="jdfcPanel-onboard" class="hidden" aria-labelledby="obTitle">
+      <h1 id="obTitle">Create a profile</h1>
+      <p class="sub">A fresh start: your own resumes, rules and log. Nothing from other profiles is visible here. Five short steps; you can skip the optional ones.</p>
+      <p id="obStatus" class="small" role="status" aria-live="polite"></p>
+
+      <form id="obStep1" class="card ob-step" novalidate>
+        <h2 id="obH1" tabindex="-1">Step 1 of 5: name and password</h2>
+        <fieldset>
+          <legend>Profile</legend>
+          <label for="obId">Profile id (2-32 characters: a-z, 0-9 and -)</label>
+          <input type="text" id="obId" autocomplete="off" spellcheck="false" maxlength="32" pattern="[a-z0-9][a-z0-9-]{1,31}" required>
+          <label for="obName">Display name</label>
+          <input type="text" id="obName" autocomplete="name" maxlength="80">
+          <label for="obPw">Password (optional; encrypts this profile's data on disk)</label>
+          <input type="password" id="obPw" autocomplete="new-password" maxlength="1024" aria-describedby="obPwHelp">
+          <label for="obPw2">Confirm password</label>
+          <input type="password" id="obPw2" autocomplete="new-password" maxlength="1024">
+          <p class="small" id="obPwHelp">There is no password recovery: a forgotten password means resetting the profile.</p>
+        </fieldset>
+        <div class="options"><button class="btn" type="submit">Create profile</button><button class="btn secondary" type="button" id="obCancel">Cancel</button></div>
+      </form>
+
+      <form id="obStep2" class="card ob-step hidden" novalidate>
+        <h2 id="obH2" tabindex="-1">Step 2 of 5: add your resumes</h2>
+        <fieldset>
+          <legend>Upload resumes</legend>
+          <p class="small" id="obUpHelp">Upload one or more .docx versions. Per role family the newest upload becomes the default base. PDF is not supported yet: export to .docx or paste the text below.</p>
+          <label for="obFiles">Resume files (.docx, several allowed)</label>
+          <input type="file" id="obFiles" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" multiple aria-describedby="obUpHelp">
+          <label for="obFamily">Role family for these files (for example pm, analyst, ops)</label>
+          <input type="text" id="obFamily" value="general" autocomplete="off">
+          <label for="obPaste">Or paste resume text (one paragraph per line)</label>
+          <textarea id="obPaste"></textarea>
+          <label for="obPasteName">Name for the pasted resume (optional)</label>
+          <input type="text" id="obPasteName" autocomplete="off" maxlength="60">
+        </fieldset>
+        <div class="options"><button class="btn secondary" type="button" id="obUpload">Upload</button><button class="btn" type="submit">Continue to review</button></div>
+        <ul id="obUploads" class="small" aria-label="Uploaded resumes"></ul>
+      </form>
+
+      <form id="obStep3" class="card ob-step hidden" novalidate>
+        <h2 id="obH3" tabindex="-1">Step 3 of 5: review the draft</h2>
+        <p class="small">Drafted from your resume text. Keep only what you can back up; every field is editable.</p>
+        <fieldset>
+          <legend>Your facts</legend>
+          <div class="row">
+            <div><label for="obDName">Name</label><input type="text" id="obDName" maxlength="80"></div>
+            <div><label for="obDYears">Total years of experience</label><input type="number" id="obDYears" min="0" max="60" step="0.1"></div>
+          </div>
+          <div class="row">
+            <div><label for="obDRole">Current role</label><input type="text" id="obDRole" maxlength="120"></div>
+            <div><label for="obDEmployer">Current employer</label><input type="text" id="obDEmployer" maxlength="120"></div>
+          </div>
+          <label for="obDTitles">Titles held (one per line)</label><textarea id="obDTitles"></textarea>
+          <label for="obDEdu">Education (one per line: degree | field | school)</label><textarea id="obDEdu"></textarea>
+          <label for="obDCerts">Certifications (one per line)</label><textarea id="obDCerts"></textarea>
+          <label for="obDTools">Tools (one per line: tool: met, partial or not_met)</label><textarea id="obDTools"></textarea>
+          <label for="obDDomains">Domains (one per line: domain: met, partial or not_met)</label><textarea id="obDDomains"></textarea>
+          <label for="obDForbidden">Claims you must never make (one phrase per line, for example people management)</label><textarea id="obDForbidden"></textarea>
+        </fieldset>
+        <div id="obMetrics" class="small" aria-label="Metrics found in your resumes"></div>
+        <div class="options"><button class="btn secondary" type="button" id="obBack3">Back</button><button class="btn" type="submit">Continue</button></div>
+      </form>
+
+      <form id="obStep4" class="card ob-step hidden" novalidate>
+        <h2 id="obH4" tabindex="-1">Step 4 of 5: directions and strictness</h2>
+        <div id="obDirections"></div>
+        <fieldset>
+          <legend>Seniority and threshold</legend>
+          <label for="obCeiling">Seniority ceiling: highest "minimum years" a JD may ask for</label>
+          <input type="number" id="obCeiling" min="0" max="40" step="1">
+          <label for="obThreshold">Apply threshold (fit % at which you apply as-is)</label>
+          <input type="number" id="obThreshold" min="40" max="95" step="1" value="75">
+          <label for="obBand">Tailor band (points below the threshold worth tailoring)</label>
+          <input type="number" id="obBand" min="0" max="55" step="1" value="20">
+        </fieldset>
+        <div class="options"><button class="btn secondary" type="button" id="obBack4">Back</button><button class="btn" type="submit">Save profile</button></div>
+      </form>
+
+      <form id="obStep5" class="card ob-step hidden" novalidate>
+        <h2 id="obH5" tabindex="-1">Step 5 of 5: import an existing log (optional)</h2>
+        <fieldset>
+          <legend>Application log</legend>
+          <label for="obLogFormat">Format</label>
+          <select id="obLogFormat"><option value="csv">CSV (header row: date, company, role, status, resume, fit)</option><option value="markdown">Markdown checklist</option></select>
+          <label for="obLogText">Paste the log</label>
+          <textarea id="obLogText"></textarea>
+        </fieldset>
+        <div class="options"><button class="btn secondary" type="button" id="obImport">Import</button><button class="btn" type="submit">Finish</button></div>
+      </form>
+    </section>
+  </main>
+</div>
+
+<dialog id="unlockDlg" aria-labelledby="unlockTitle">
+  <form id="unlockForm" novalidate>
+    <h2 id="unlockTitle">Unlock profile</h2>
+    <label for="unlockPw">Password for <span id="unlockName"></span></label>
+    <input type="password" id="unlockPw" autocomplete="current-password" maxlength="1024">
+    <p id="unlockErr" class="small" role="alert" aria-live="assertive"></p>
+    <div class="options"><button class="btn" type="submit">Unlock</button><button class="btn secondary" type="button" id="unlockCancel">Cancel</button></div>
+  </form>
+</dialog>
+
+<script>
+'use strict';
+const $ = (id) => document.getElementById(id);
+// Safe form reads: a missing element, or a foreign element with a colliding id (for example one injected by a
+// browser extension), reads as empty instead of throwing. rawVal keeps whitespace (passwords, pasted text).
+const rawVal = (id) => { const el = $(id); return el && typeof el.value === 'string' ? el.value : ''; };
+const val = (id) => rawVal(id).trim();
+const checked = (id) => { const el = $(id); return Boolean(el && el.checked === true); };
+const num = (id) => Number(val(id)); // '' reads as 0, like Number(el.value) did; non-numbers give NaN
+// Write a form field only if it really is one (never throws on a missing or foreign element).
+function setVal(id, v) { const el = $(id); if (el && typeof el.value === 'string') el.value = v; }
+const fileList = (id) => { const el = $(id); return el && el.files && typeof el.files.length === 'number' ? [...el.files] : []; };
+// Safe localStorage: private windows or strict privacy settings can make storage throw; that must never break the page.
+// get() returns undefined when storage is unavailable (null when the key is simply not set).
+const store = {
+  get(k) { try { return window.localStorage.getItem(k); } catch { return undefined; } },
+  set(k, v) { try { window.localStorage.setItem(k, String(v)); return true; } catch { return false; } },
+  remove(k) { try { window.localStorage.removeItem(k); } catch { /* storage unavailable */ } }
+};
+function h(tag, attrs, ...kids) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (v === null || v === undefined || v === false) continue;
+    if (k === 'class') el.className = v; else if (k === 'text') el.textContent = v;
+    else if (k.startsWith('on')) el.addEventListener(k.slice(2), v); else el.setAttribute(k, v === true ? '' : v);
+  }
+  for (const c of kids.flat()) if (c !== null && c !== undefined && c !== false) el.append(c instanceof Node ? c : document.createTextNode(String(c)));
+  return el;
+}
+function say(msg) { $('jdfcStatus').textContent = msg; }
+// Defensive init: a widget that fails to initialise is logged and reported in a small banner, and the rest of the
+// page keeps attaching its listeners (one missing element or exception can no longer leave other buttons dead).
+const initFailures = [];
+function reportInitError(name, error) {
+  console.error(`JD Fit Checker: "${name}" failed to initialise`, error);
+  initFailures.push(name);
+  const b = document.getElementById('initErr');
+  if (!b) return;
+  b.textContent = `Part of the page failed to load (${initFailures.join(', ')}). Other controls still work; details are in the browser console (F12). Try Ctrl+F5.`;
+  b.classList.remove('hidden');
+}
+function guard(name, fn) { try { fn(); } catch (error) { reportInitError(name, error); } }
+function on(id, event, fn) { guard(`#${id} ${event}`, () => $(id).addEventListener(event, fn)); }
+// Profile-scoped API: '/api/<route>' -> '/api/p/<profile>/<route>'. Global routes go through apiGlobal().
+let profileId = null;
+let profileLog = 'checklist';
+// '/api/health' is NOT here: the UI wants the profile's health (/api/p/<id>/health), not the global one.
+const GLOBAL_ROUTES = ['/api/fetch', '/api/profiles', '/api/directions'];
+function urlBase() { return `/p/${encodeURIComponent(profileId || '')}`; }
+// Request timeouts (opt-in per call): Analyze and Fetch JD must never leave the page waiting forever on a busy or
+// stopped server. Generation jobs poll short requests and keep their own long overall limits.
+const ANALYZE_TIMEOUT_MS = 60000;
+const FETCH_TIMEOUT_MS = 30000;
+// { timeoutMs }: abort the request after that long and reject with an Error named 'TimeoutError'.
+async function apiGlobal(path, body, { timeoutMs } = {}) {
+  const opt = body ? { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) } : {};
+  let ctl = null; let timer = null;
+  if (timeoutMs) { ctl = new AbortController(); opt.signal = ctl.signal; timer = setTimeout(() => ctl.abort(), timeoutMs); }
+  try {
+    const r = await fetch(path, opt);
+    return await r.json();
+  } catch (error) {
+    if (ctl && ctl.signal.aborted) { const e = new Error(`Request timed out after ${Math.round(timeoutMs / 1000)} s`); e.name = 'TimeoutError'; throw e; }
+    throw error;
+  } finally { clearTimeout(timer); }
+}
+async function api(path, body, opts) {
+  if (GLOBAL_ROUTES.includes(path.split('?')[0])) return apiGlobal(path, body, opts);
+  const r = await apiGlobal(path.replace(/^\/api\//, `/api/p/${encodeURIComponent(profileId || '')}/`), body, opts);
+  if (r && r.code === 'PROFILE_LOCKED') markLocked(); // session expired or locked elsewhere
+  return r;
+}
+function card(title, ...kids) { return h('section', { class: 'card', 'aria-label': title }, h('h2', { text: title }), ...kids); }
+function pill(text, kind) { return h('span', { class: `pill ${kind}`, text }); }
+const STATUS_KIND = { met: 'ok', partial: 'warn', unknown: 'info', not_met: 'bad', matched: 'ok', supportable: 'warn', unsupported: 'bad', redflag: 'bad' };
+const VERDICT_KIND = { apply_as_is: 'ok', tailor_light: 'ok', tailor_salvage: 'warn', hold: 'warn', skip: 'bad', skip_repeat: 'bad' };
+async function copy(text, btn) {
+  try { await navigator.clipboard.writeText(text); } catch { const t = h('textarea', {}); t.value = text; document.body.append(t); t.select(); document.execCommand('copy'); t.remove(); }
+  if (btn) { const o = btn.textContent; btn.textContent = 'Copied'; setTimeout(() => (btn.textContent = o), 1200); }
+  say('Copied to clipboard');
+}
+
+// ---------------- threshold
+let settings = { min: 40, max: 95, step: 5, default: 75 };
+function clampT(v) { const n = Math.round(Number(v)); if (!Number.isFinite(n)) return settings.default; return Math.min(settings.max, Math.max(settings.min, n)); }
+function getT() { return clampT(store.get('jdfc.threshold') ?? settings.default); }
+function setT(v, rerun) {
+  const t = clampT(v);
+  store.set('jdfc.threshold', t);
+  setVal('thrRange', t); setVal('thrNum', t); $('thrValue').textContent = t;
+  guard('help verdict table', renderHelpBands);
+  if (rerun && lastInput) runAnalyze(true);
+}
+let thrTimer = null;
+on('thrRange', 'input', () => { const v = val('thrRange'); $('thrValue').textContent = v; clearTimeout(thrTimer); thrTimer = setTimeout(() => setT(v, true), 150); });
+on('thrNum', 'change', () => setT(val('thrNum'), true));
+on('thrReset', 'click', () => setT(settings.default, true));
+
+// ---------------- tabs (arrow-key support)
+const tabs = [...document.querySelectorAll('[role=tab]')];
+function selectTab(tab) {
+  if (tab.id !== 'jdfcTab-help' && helpVisible()) markHelpSeen(); // leaving Help marks it as seen
+  for (const t of tabs) { const on = t === tab; t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1; $(t.getAttribute('aria-controls')).classList.toggle('hidden', !on); }
+  $('jdfcPanel-onboard').classList.add('hidden');
+  tab.focus();
+}
+tabs.forEach((t, i) => guard(`tab ${t.id}`, () => {
+  t.addEventListener('click', () => selectTab(t));
+  t.addEventListener('keydown', (e) => {
+    if (['ArrowDown', 'ArrowRight'].includes(e.key)) { e.preventDefault(); selectTab(tabs[(i + 1) % tabs.length]); }
+    if (['ArrowUp', 'ArrowLeft'].includes(e.key)) { e.preventDefault(); selectTab(tabs[(i - 1 + tabs.length) % tabs.length]); }
+    if (e.key === 'Home') { e.preventDefault(); selectTab(tabs[0]); }
+    if (e.key === 'End') { e.preventDefault(); selectTab(tabs[tabs.length - 1]); }
+  });
+}));
+
+// ---------------- Help tab: walkthrough "Go there" buttons, live verdict table, first-run auto-open
+// jdfc.helpSeen = '1' once the user has left Help (global); jdfc.helpSeen.<profile> per profile.
+// jdfc.helpOnStart = '1' (always open Help on start) / '0' (never), set by the "Show Help on start" checkbox.
+const HELP_SEEN = 'jdfc.helpSeen';
+const HELP_ON_START = 'jdfc.helpOnStart';
+function helpVisible() { const p = $('jdfcPanel-help'); return Boolean(p && !p.classList.contains('hidden')); }
+function syncHelpOnStart() {
+  const cb = $('jdfcHelpOnStart');
+  if (cb && 'checked' in cb) cb.checked = store.get(HELP_ON_START) === '1' || store.get(HELP_SEEN) === null;
+}
+function markHelpSeen() {
+  store.set(HELP_SEEN, '1');
+  if (profileId) store.set(`${HELP_SEEN}.${profileId}`, '1');
+  syncHelpOnStart();
+}
+function openHelp(focusId = 'jdfcHelpH') {
+  selectTab($('jdfcTab-help'));
+  const el = $(focusId);
+  if (el) el.focus();
+}
+function renderHelpBands() {
+  const T = getT();
+  const band = Number.isFinite(Number(settings.tailorBand)) ? Number(settings.tailorBand) : 20;
+  const lift = Number.isFinite(Number(settings.salvageMinLift)) ? Number(settings.salvageMinLift) : 10;
+  const floor = Math.max(0, T - band);
+  const cap = $('jdfcHelpBandsCap');
+  if (cap) cap.textContent = `At your current settings: apply threshold T = ${T}%, tailor band ${band} points (tailor floor ${floor}%). This table follows the threshold slider.`;
+  const body = $('jdfcHelpBandsBody');
+  if (!body) return;
+  body.textContent = '';
+  for (const [label, when] of [
+    ['Apply as-is', `Fit ≥ ${T}% and no fix is needed.`],
+    ['Tailor (reaches threshold)', `Honest edits bring the projected fit to ≥ ${T}%.`],
+    ['Tailor (salvage)', `Honest edits add ≥ ${lift} points, or fix a must-have while the projected fit is ≥ ${floor}%, but it stays below ${T}%. You decide.`],
+    ['Hold / long shot', `Fit ${floor}-${T - 1}% with no worthwhile edit. You decide.`],
+    ['Skip', `Fit below ${floor}% (T - ${band}) with no worthwhile edit, or a hard gate fails: too senior, wrong direction, or a required certification, tool or domain is missing.`],
+    ['Skip (repeat)', 'You already applied to this role.']
+  ]) body.append(h('tr', {}, h('th', { scope: 'row', text: label }), h('td', { text: when })));
+}
+// "Go there": switch to the tab and focus the control (fallback control if the first one is hidden right now).
+function helpGo(btn) {
+  markHelpSeen();
+  const tab = btn.dataset.jdfcTab;
+  if (tab === 'onboard') { openOnboarding(); return; }
+  const t = $(`jdfcTab-${tab}`);
+  if (t) selectTab(t);
+  const usable = (el) => Boolean(el && el.getClientRects().length > 0);
+  let el = $(btn.dataset.jdfcFocus);
+  if (!usable(el) && btn.dataset.jdfcFallback) el = $(btn.dataset.jdfcFallback);
+  if (usable(el)) el.focus();
+}
+document.querySelectorAll('.jdfc-goto').forEach((b, i) => guard(`help step ${i + 1}`, () => b.addEventListener('click', () => helpGo(b))));
+on('jdfcHelpStart', 'click', () => openHelp('jdfcHelpWalkH'));
+on('jdfcHelpOnStart', 'change', () => {
+  const show = checked('jdfcHelpOnStart');
+  store.set(HELP_ON_START, show ? '1' : '0');
+  if (!show) store.set(HELP_SEEN, '1');
+  say(show ? 'Help will open when the page starts.' : 'Help will no longer open when the page starts.');
+});
+guard('help tab', () => { renderHelpBands(); syncHelpOnStart(); });
+// Auto-open Help for first-time users: first visit in this browser, or a profile that is new (just created, or opened
+// for the first time with no history and no logged applications). Nothing is blocked; every tab stays available.
+async function maybeAutoHelp({ newlyCreated = false } = {}) {
+  try {
+    const seen = store.get(HELP_SEEN);
+    if (seen === undefined) return; // storage unavailable: it could not be remembered, so do not open it on every load
+    const pref = store.get(HELP_ON_START);
+    let open = pref === '1' || seen === null;
+    const p = currentEntry();
+    if (!open && pref !== '0' && p && p.kind !== 'demo' && !p.locked && store.get(`${HELP_SEEN}.${p.id}`) === null) {
+      let fresh = newlyCreated;
+      if (!fresh && lastHealth && lastHealth.ok && lastHealth.checklistEntries === 0) {
+        const hist = await api('/api/history');
+        fresh = Boolean(hist && Array.isArray(hist.entries) && hist.entries.length === 0);
+      }
+      if (fresh) open = true; else store.set(`${HELP_SEEN}.${p.id}`, '1'); // has data: not a first-time profile
+    }
+    if (open) openHelp();
+  } catch (error) { console.warn('JD Fit Checker: could not decide whether to open Help', error); }
+}
+
+// ---------------- profile health (resume counts, threshold settings)
+let lastHealth = null;
+async function loadHealth() {
+  try {
+    lastHealth = null;
+    const hl = await api('/api/health');
+    lastHealth = hl;
+    if (!hl.ok) { $('healthBox').textContent = hl.error || 'Profile could not be loaded.'; return; }
+    profileLog = hl.log || 'checklist';
+    const isDemo = Boolean(hl.profile && hl.profile.kind === 'demo');
+    for (const id of ['demoReset', 'demoResetHelp']) $(id).classList.toggle('hidden', !isDemo);
+    settings = { ...settings, ...hl.threshold, default: hl.threshold.def };
+    for (const el of [$('thrRange'), $('thrNum')]) { el.min = settings.min; el.max = settings.max; el.step = settings.step; }
+    $('thrReset').textContent = `Reset to ${settings.default}`;
+    setT(getT(), false);
+    const box = $('healthBox'); box.textContent = '';
+    box.append(h('div', {}, h('b', { text: `${hl.resumeCount} resumes` }), ` (${hl.baseCount} bases) · ${hl.checklistEntries} ${profileLog === 'checklist' ? 'checklist items' : 'logged applications'}`));
+    for (const w of hl.warnings || []) box.append(h('div', { class: 'small', text: `⚠ ${w}` }));
+  } catch (e) { $('healthBox').textContent = 'Server not reachable.'; }
+}
+
+// ---------------- profile switcher
+function clearPanels() {
+  lastInput = null; lastResult = null; lastGen = null; userChoice = null;
+  for (const id of ['jdfcResults', 'analyzeMsg', 'cmpOut', 'histOut', 'repoOut', 'evOut', 'statsOut', 'calOut', 'pendingList', 'evMsg', 'fetchMsg', 'pwMsg', 'resetMsg', 'upMsg']) $(id).textContent = '';
+  $('pickOut').textContent = ''; $('pickOut').classList.add('hidden');
+}
+// ---------------- profile list + lock state
+let profileList = [];
+const currentEntry = () => profileList.find((p) => p.id === profileId) || null;
+function renderProfileOptions() {
+  const sel = $('jdfcProfileSwitch'); sel.textContent = '';
+  for (const p of profileList) sel.append(h('option', { value: p.id, text: `${p.name}${p.kind === 'demo' ? ' (demo)' : ''}${p.protected ? (p.locked ? ' 🔒 locked' : ' 🔓') : ''}` }));
+  if (profileId) sel.value = profileId;
+}
+async function refreshProfileList() {
+  try { profileList = (await apiGlobal('/api/profiles')).profiles || []; } catch { profileList = []; }
+  renderProfileOptions();
+  renderLockState();
+}
+function renderLockState() {
+  const p = currentEntry();
+  const isProtected = Boolean(p && p.protected);
+  const locked = Boolean(p && p.locked);
+  const isDemo = Boolean(p && p.kind === 'demo');
+  $('lockState').textContent = !p ? '' : !isProtected ? 'Not password protected.' : locked ? '🔒 Locked: unlock to view this profile.' : '🔓 Unlocked.';
+  $('unlockBtn').classList.toggle('hidden', !locked);
+  $('lockBtn').classList.toggle('hidden', !isProtected || locked);
+  // Profile settings panel
+  $('profDemoNote').classList.toggle('hidden', !isDemo);
+  $('pwCard').classList.toggle('hidden', isDemo || locked);
+  $('resetCard').classList.toggle('hidden', isDemo);
+  $('upCard').classList.toggle('hidden', !(p && p.kind === 'user' && !locked));
+  $('pwCurrentWrap').classList.toggle('hidden', !isProtected);
+  $('pwLegend').textContent = isProtected ? 'Change password' : 'Set a password';
+  $('pwSubmit').textContent = isProtected ? 'Change password' : 'Set password';
+  $('resetIdHint').textContent = profileId ? `"${profileId}"` : '';
+  $('profSettingsSub').textContent = p ? `Password protection and reset for profile "${p.name}" (${p.id}).` : 'Password protection and reset for the selected profile.';
+}
+function showLocked() {
+  clearPanels();
+  $('healthBox').textContent = 'This profile is locked. Unlock it with its password to see its resumes, history and log.';
+  $('pendingList').textContent = 'Locked.';
+  for (const id of ['demoReset', 'demoResetHelp']) $(id).classList.add('hidden');
+}
+function markLocked() {
+  const p = currentEntry();
+  if (!p || p.locked) return;
+  p.locked = true;
+  renderProfileOptions();
+  renderLockState();
+  showLocked();
+  say('The profile was locked (idle timeout or lock). Unlock it to continue.');
+}
+async function switchProfile(id, { promptUnlock = false } = {}) {
+  profileId = id;
+  store.set('jdfc.profile', id);
+  clearPanels();
+  renderProfileOptions();
+  renderLockState();
+  const p = currentEntry();
+  if (p && p.locked) {
+    showLocked();
+    say(`Profile ${id} is locked.`);
+    if (promptUnlock) openUnlock();
+    return;
+  }
+  $('healthBox').textContent = 'Loading…';
+  await loadHealth();
+  loadPending();
+  say(`Switched to profile ${id}.`);
+}
+async function initProfiles() {
+  try { profileList = (await apiGlobal('/api/profiles')).profiles || []; } catch { $('healthBox').textContent = 'Server not reachable.'; return; }
+  if (!profileList.length) { renderProfileOptions(); $('healthBox').textContent = 'No profiles yet.'; return; }
+  const saved = store.get('jdfc.profile');
+  const pick = profileList.find((p) => p.id === saved) || profileList.find((p) => p.kind !== 'demo') || profileList[0];
+  await switchProfile(pick.id);
+  await maybeAutoHelp();
+}
+on('jdfcProfileSwitch', 'change', async () => { await switchProfile(val('jdfcProfileSwitch'), { promptUnlock: true }); await maybeAutoHelp(); });
+
+// ---------------- unlock dialog (Enter submits; focus returns to the opener)
+let unlockReturnFocus = null;
+function openUnlock() {
+  const p = currentEntry();
+  if (!p) return;
+  unlockReturnFocus = document.activeElement;
+  $('unlockName').textContent = `${p.name} (${p.id})`;
+  $('unlockErr').textContent = '';
+  setVal('unlockPw', '');
+  $('unlockDlg').showModal();
+  $('unlockPw').focus();
+}
+on('unlockDlg', 'close', () => {
+  setVal('unlockPw', '');
+  const back = unlockReturnFocus && document.contains(unlockReturnFocus) ? unlockReturnFocus : $('jdfcProfileSwitch');
+  back.focus();
+});
+on('unlockCancel', 'click', () => $('unlockDlg').close());
+on('unlockBtn', 'click', openUnlock);
+on('unlockForm', 'submit', async (e) => {
+  e.preventDefault();
+  const password = rawVal('unlockPw');
+  if (!password) { $('unlockErr').textContent = 'Enter the password.'; $('unlockPw').focus(); return; }
+  let r;
+  try { r = await apiGlobal(`/api/profiles/${encodeURIComponent(profileId)}/unlock`, { password }); } catch { $('unlockErr').textContent = 'Server not reachable.'; return; }
+  setVal('unlockPw', '');
+  if (!r.ok) {
+    $('unlockErr').textContent = r.code === 'RATE_LIMITED' ? `Too many wrong passwords. Try again in ${r.retryAfter} seconds.` : r.code === 'WRONG_PASSWORD' ? 'Wrong password. Try again.' : (r.error || 'Unlock failed.');
+    $('unlockPw').focus();
+    return;
+  }
+  unlockReturnFocus = $('lockBtn');
+  await refreshProfileList();
+  $('unlockDlg').close();
+  await switchProfile(profileId);
+  say(`Profile ${profileId} unlocked.`);
+  await maybeAutoHelp();
+});
+on('lockBtn', 'click', async () => {
+  try { await apiGlobal(`/api/profiles/${encodeURIComponent(profileId)}/lock`, {}); } catch { say('Lock failed: server not reachable.'); return; }
+  await refreshProfileList();
+  await switchProfile(profileId);
+  $('unlockBtn').focus();
+  say(`Profile ${profileId} locked.`);
+});
+
+// ---------------- profile settings: set / change password, reset
+on('pwForm', 'submit', async (e) => {
+  e.preventDefault();
+  const p = currentEntry();
+  const msg = $('pwMsg');
+  const next = rawVal('pwNew');
+  if (!next) { msg.textContent = 'Enter a new password.'; $('pwNew').focus(); return; }
+  if (next !== rawVal('pwConfirm')) { msg.textContent = 'The two new passwords do not match.'; $('pwConfirm').focus(); return; }
+  const body = { next };
+  if (p && p.protected) body.current = rawVal('pwCurrent');
+  msg.textContent = 'Encrypting… this takes a moment.';
+  let r;
+  try { r = await api('/api/password', body); } catch { msg.textContent = 'Server not reachable.'; return; }
+  for (const id of ['pwCurrent', 'pwNew', 'pwConfirm']) setVal(id, '');
+  if (!r.ok) { msg.textContent = r.code === 'RATE_LIMITED' ? `Too many wrong passwords. Try again in ${r.retryAfter} seconds.` : `Not changed: ${r.error || 'unknown error'}`; return; }
+  await refreshProfileList();
+  msg.textContent = p && p.protected ? 'Password changed. The files were re-encrypted with the new password.' : 'Password set. This profile is now encrypted on disk and stays unlocked in this browser until you lock it or it is idle for 30 minutes.';
+});
+on('resetForm', 'submit', async (e) => {
+  e.preventDefault();
+  const msg = $('resetMsg');
+  const typed = val('resetConfirm');
+  if (typed !== profileId) { msg.textContent = `Type the profile id "${profileId}" exactly to confirm.`; $('resetConfirm').focus(); return; }
+  let r;
+  try { r = await apiGlobal(`/api/profiles/${encodeURIComponent(profileId)}/reset`, { confirm: typed }); } catch { msg.textContent = 'Server not reachable.'; return; }
+  setVal('resetConfirm', '');
+  if (!r.ok) { msg.textContent = `Reset failed: ${r.error || 'unknown error'}`; return; }
+  await refreshProfileList();
+  await switchProfile(profileId);
+  msg.textContent = 'Profile reset: it is now empty and not password protected.';
+});
+on('demoReset', 'click', async () => {
+  if (!window.confirm('Reset the demo profile? Generated files, logged applications and history in the demo are replaced by the original sample data.')) { say('Demo reset cancelled.'); return; }
+  try {
+    const r = await apiGlobal('/api/demo/reset', { confirm: true });
+    if (!r.ok) { say(`Demo reset failed: ${r.error || 'unknown error'}`); return; }
+    await switchProfile('demo');
+    say('Demo profile restored to the sample data.');
+  } catch { say('Demo reset failed: server not reachable.'); }
+});
+
+// ---------------- resume upload helpers (shared by onboarding and "Upload new version")
+function toBase64(buf) {
+  const bytes = new Uint8Array(buf);
+  let s = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  return btoa(s);
+}
+// Uploads files (or pasted text) to /api/p/<id>/resumes. Returns [{ name, ok, text }] for the status list.
+async function uploadResumes(id, { files, family, text, textName }) {
+  const out = [];
+  const url = `/api/p/${encodeURIComponent(id)}/resumes`;
+  for (const f of files || []) {
+    let r;
+    try {
+      const body = { fileName: f.name, family };
+      // A .pdf is not read: the server refuses it by name with the standard "PDF not supported yet" message.
+      body.dataBase64 = /\.pdf$/i.test(f.name) ? 'JVBERg==' : toBase64(await f.arrayBuffer());
+      r = await apiGlobal(url, body);
+    } catch { r = { ok: false, error: 'Server not reachable.' }; }
+    out.push({ name: f.name, ok: Boolean(r.ok), text: r.ok ? `${f.name}: saved as ${r.upload.file} (family ${r.upload.family}, version ${r.upload.version})` : `${f.name}: ${r.error || 'upload failed'}` });
+  }
+  if (text && text.trim()) {
+    let r;
+    try { r = await apiGlobal(url, { family, text, fileName: textName || undefined }); } catch { r = { ok: false, error: 'Server not reachable.' }; }
+    out.push({ name: 'pasted text', ok: Boolean(r.ok), text: r.ok ? `Pasted text: saved as ${r.upload.file} (family ${r.upload.family}, version ${r.upload.version})` : `Pasted text: ${r.error || 'upload failed'}` });
+  }
+  return out;
+}
+
+// ---------------- profile settings: upload new version
+on('upForm', 'submit', async (e) => {
+  e.preventDefault();
+  const msg = $('upMsg');
+  const files = fileList('upFile');
+  const text = files.length ? '' : rawVal('upPaste');
+  if (!files.length && !text.trim()) { msg.textContent = 'Choose a .docx file or paste the resume text.'; $('upFile').focus(); return; }
+  msg.textContent = 'Uploading…';
+  const res = await uploadResumes(profileId, { files, family: val('upFamily'), text });
+  msg.textContent = res.map((x) => x.text).join(' ');
+  if (res.some((x) => x.ok)) { setVal('upFile', ''); setVal('upPaste', ''); await loadHealth(); }
+});
+
+// ---------------- onboarding: create profile (5 steps, keyboard-only, focus moves to each step heading)
+const ob = { id: null, draft: null, directions: [] };
+function obSay(t) { $('obStatus').textContent = t; }
+function obStep(n) {
+  for (let i = 1; i <= 5; i++) $(`obStep${i}`).classList.toggle('hidden', i !== n);
+  $(`obH${n}`).focus();
+}
+function openOnboarding() {
+  if (helpVisible()) markHelpSeen();
+  for (const t of tabs) { t.setAttribute('aria-selected', 'false'); $(t.getAttribute('aria-controls')).classList.add('hidden'); }
+  Object.assign(ob, { id: null, draft: null, directions: [] });
+  for (const id of ['obId', 'obName', 'obPw', 'obPw2', 'obPaste', 'obPasteName', 'obLogText']) setVal(id, '');
+  setVal('obFamily', 'general');
+  $('obUploads').textContent = '';
+  obSay('');
+  $('jdfcPanel-onboard').classList.remove('hidden');
+  obStep(1);
+}
+function closeOnboarding() {
+  $('jdfcPanel-onboard').classList.add('hidden');
+  selectTab(tabs[0]);
+}
+on('createProfileBtn', 'click', openOnboarding);
+on('obCancel', 'click', () => { closeOnboarding(); say('Profile creation cancelled.'); });
+on('obStep1', 'submit', async (e) => {
+  e.preventDefault();
+  const id = val('obId');
+  const pw = rawVal('obPw');
+  if (!/^[a-z0-9][a-z0-9-]{1,31}$/.test(id)) { obSay('The id needs 2-32 characters: a-z, 0-9 and -, starting with a letter or digit.'); $('obId').focus(); return; }
+  if (pw && pw !== rawVal('obPw2')) { obSay('The two passwords do not match.'); $('obPw2').focus(); return; }
+  obSay(pw ? 'Creating and encrypting the profile…' : 'Creating the profile…');
+  let r;
+  try { r = await apiGlobal('/api/profiles', { id, name: val('obName'), ...(pw ? { password: pw } : {}) }); } catch { obSay('Server not reachable.'); return; }
+  setVal('obPw', ''); setVal('obPw2', '');
+  if (!r.ok) { obSay(`Not created: ${r.error || 'unknown error'}`); $('obId').focus(); return; }
+  ob.id = id;
+  await refreshProfileList();
+  obSay(`Profile ${id} created${r.profile.protected ? ' and password protected (unlocked in this browser)' : ''}.`);
+  obStep(2);
+});
+on('obUpload', 'click', async () => {
+  const files = fileList('obFiles');
+  const text = rawVal('obPaste');
+  if (!files.length && !text.trim()) { obSay('Choose one or more .docx files or paste the resume text.'); $('obFiles').focus(); return; }
+  obSay('Uploading…');
+  const res = await uploadResumes(ob.id, { files, family: val('obFamily'), text, textName: val('obPasteName') });
+  for (const x of res) $('obUploads').append(h('li', { text: `${x.ok ? '✓' : '⚠'} ${x.text}` }));
+  if (res.some((x) => x.ok)) { setVal('obFiles', ''); setVal('obPaste', ''); setVal('obPasteName', ''); }
+  obSay(`${res.filter((x) => x.ok).length} of ${res.length} uploaded.`);
+});
+const linesOf = (id) => rawVal(id).split('\n').map((s) => s.trim()).filter(Boolean);
+const statusLines = (obj) => Object.entries(obj || {}).map(([k, v]) => `${k}: ${v}`).join('\n');
+function parseStatusLines(id) {
+  const out = {};
+  for (const l of linesOf(id)) {
+    const m = l.match(/^(.+?)\s*:\s*(met|partial|not_met)$/i);
+    if (m) out[m[1].trim().toLowerCase()] = m[2].toLowerCase(); else out[l.toLowerCase()] = 'met';
+  }
+  return out;
+}
+on('obStep2', 'submit', async (e) => {
+  e.preventDefault();
+  obSay('Drafting your profile from the uploaded text…');
+  let r;
+  try { r = await apiGlobal(`/api/p/${encodeURIComponent(ob.id)}/onboarding/draft`); } catch { obSay('Server not reachable.'); return; }
+  if (!r.ok) { obSay(`Draft failed: ${r.error || 'unknown error'}`); return; }
+  if (!r.resumes.length) { obSay('Upload at least one resume (or paste its text) first.'); $('obFiles').focus(); return; }
+  const d = r.draft;
+  ob.draft = d;
+  ob.directions = r.directions;
+  setVal('obDName', val('obName'));
+  setVal('obDYears', d.totalYears);
+  setVal('obDRole', d.currentRole || '');
+  setVal('obDEmployer', d.employer || '');
+  setVal('obDTitles', (d.titles || []).join('\n'));
+  setVal('obDEdu', (d.education || []).map((x) => [x.degree, x.field || '', x.school || ''].join(' | ')).join('\n'));
+  setVal('obDCerts', (d.certifications || []).map((c) => c.name).join('\n'));
+  setVal('obDTools', statusLines(d.tools));
+  setVal('obDDomains', statusLines(d.domains));
+  setVal('obDForbidden', '');
+  const m = $('obMetrics'); m.textContent = '';
+  if ((d.metrics || []).length) {
+    m.append(h('b', { text: 'Metrics found (for reference; claims stay as written in your resume):' }));
+    const ul = h('ul', {});
+    for (const x of d.metrics.slice(0, 10)) ul.append(h('li', { text: `${x.metric}: ${x.text}` }));
+    m.append(ul);
+  }
+  setVal('obCeiling', r.defaults.ceiling);
+  setVal('obThreshold', r.defaults.applyThreshold);
+  setVal('obBand', r.defaults.tailorBand);
+  renderObDirections();
+  obSay(`Draft ready from ${r.resumes.length} resume${r.resumes.length === 1 ? '' : 's'}.`);
+  obStep(3);
+});
+function renderObDirections() {
+  const box = $('obDirections'); box.textContent = '';
+  for (const d of ob.directions) {
+    const set = h('fieldset', {}, h('legend', { text: `Direction: ${d.label}` }));
+    const opts = h('div', { class: 'options' });
+    for (const [val, text] of [['target', 'Target'], ['neutral', 'Neutral'], ['avoid', 'Avoid']]) {
+      const input = h('input', { type: 'radio', name: `obDir-${d.id}`, value: val, id: `obDir-${d.id}-${val}` });
+      if (val === d.class) input.checked = true;
+      opts.append(h('label', { for: `obDir-${d.id}-${val}` }, input, ` ${text}`));
+    }
+    set.append(opts);
+    box.append(set);
+  }
+}
+on('obBack3', 'click', () => obStep(2));
+on('obBack4', 'click', () => obStep(3));
+on('obStep3', 'submit', (e) => {
+  e.preventDefault();
+  const years = num('obDYears');
+  if (!Number.isFinite(years) || years < 0 || years > 60) { obSay('Total years must be a number between 0 and 60.'); $('obDYears').focus(); return; }
+  obSay('');
+  obStep(4);
+});
+on('obStep4', 'submit', async (e) => {
+  e.preventDefault();
+  const directions = {};
+  for (const d of ob.directions) { const c = document.querySelector(`input[name="obDir-${d.id}"]:checked`); if (c) directions[d.id] = c.value; }
+  const profile = {
+    name: val('obDName'), totalYears: num('obDYears'), currentRole: val('obDRole'), employer: val('obDEmployer'),
+    titles: linesOf('obDTitles'),
+    education: linesOf('obDEdu').map((l) => { const [degree, field, school] = l.split('|').map((s) => (s || '').trim()); return { degree, field, school }; }),
+    certifications: linesOf('obDCerts'), tools: parseStatusLines('obDTools'), domains: parseStatusLines('obDDomains'), forbiddenPhrases: linesOf('obDForbidden')
+  };
+  const rules = { directions, ceiling: num('obCeiling'), applyThreshold: num('obThreshold'), tailorBand: num('obBand') };
+  obSay('Saving…');
+  let r;
+  try { r = await apiGlobal(`/api/p/${encodeURIComponent(ob.id)}/onboarding/confirm`, { profile, rules }); } catch { obSay('Server not reachable.'); return; }
+  if (!r.ok) { obSay(`Not saved: ${r.error || 'unknown error'}`); return; }
+  store.set('jdfc.threshold', rules.applyThreshold);
+  obSay('Profile saved.');
+  obStep(5);
+});
+on('obImport', 'click', async () => {
+  const text = rawVal('obLogText');
+  if (!text.trim()) { obSay('Paste a log first, or choose Finish to skip.'); $('obLogText').focus(); return; }
+  let r;
+  try { r = await apiGlobal(`/api/p/${encodeURIComponent(ob.id)}/import-log`, { format: val('obLogFormat'), text }); } catch { obSay('Server not reachable.'); return; }
+  obSay(r.ok ? `Imported ${r.added} entr${r.added === 1 ? 'y' : 'ies'} (${r.duplicates} duplicate${r.duplicates === 1 ? '' : 's'} skipped).` : `Import failed: ${r.error || 'unknown error'}`);
+  if (r.ok) setVal('obLogText', '');
+});
+on('obStep5', 'submit', async (e) => {
+  e.preventDefault();
+  const id = ob.id;
+  closeOnboarding();
+  await refreshProfileList();
+  await switchProfile(id);
+  say(`Profile ${id} is ready.`);
+  await maybeAutoHelp({ newlyCreated: true });
+});
+
+// ---------------- fetch
+on('fetchBtn', 'click', async () => {
+  const url = val('jdUrl');
+  const msg = (t) => { const m = $('fetchMsg'); if (m) m.textContent = t; };
+  if (!url) { msg('Enter a URL first.'); return; }
+  const btn = $('fetchBtn');
+  btn.disabled = true; msg('Fetching…');
+  let r;
+  try { r = await api('/api/fetch', { url }, { timeoutMs: FETCH_TIMEOUT_MS }); } catch (error) {
+    msg(error.name === 'TimeoutError'
+      ? `Fetch timed out after ${FETCH_TIMEOUT_MS / 1000} s. The site or the server may be slow or stopped; paste the JD text instead, or check the server window and try again.`
+      : `Fetch failed: ${error.message || error}. Check that the server is still running, then try again.`);
+    return;
+  } finally { btn.disabled = false; }
+  if (!r.ok) { msg(`${r.code}: ${r.message}`); $('jdText').focus(); return; }
+  setVal('jdText', r.text); if (r.company) setVal('jdCompany', r.company); if (r.title) setVal('jdTitle', r.title);
+  msg(`Fetched ${r.text.length} characters (${r.source === 'jsonld' ? 'JobPosting schema' : 'page text'}). Review it, then Analyze.`);
+});
+
+// ---------------- analyze
+let lastInput = null;
+let lastResult = null;
+on('analyzeBtn', 'click', () => runAnalyze(false));
+const LOCKED_MSG = 'Profile is locked — unlock it in the sidebar.';
+// Visible message under the Analyze button; also announced through the shared status live region.
+function analyzeSay(msg) { $('analyzeMsg').textContent = msg; say(msg); }
+async function runAnalyze(rescore) {
+  const p = currentEntry();
+  if (p && p.locked) { analyzeSay(LOCKED_MSG); return; }
+  if (!rescore) {
+    const jdText = val('jdText');
+    const url = val('jdUrl');
+    if (!jdText && !url) { analyzeSay('Paste a JD or a posting URL.'); $('jdText').focus(); return; }
+    userChoice = null; lastGen = null;
+    lastInput = { jdText, url: jdText ? undefined : url, company: val('jdCompany') || undefined, title: val('jdTitle') || undefined, ignoreHistory: checked('jdfcIgnoreHistory') };
+  }
+  if (!lastInput) return;
+  $('analyzeBtn').disabled = true; analyzeSay(rescore ? 'Re-scoring at the new threshold…' : 'Analyzing…');
+  try {
+    const body = { jdText: lastInput.jdText, url: lastInput.url, company: lastInput.company, title: lastInput.title, threshold: getT(), options: { ignoreHistory: lastInput.ignoreHistory, saveHistory: !rescore } };
+    const r = await api('/api/analyze', body, { timeoutMs: ANALYZE_TIMEOUT_MS });
+    if (r && r.code === 'PROFILE_LOCKED') { analyzeSay(LOCKED_MSG); return; }
+    if (r.ok && !lastInput.jdText) { lastInput.jdText = r.keywords.text; lastInput.url = undefined; setVal('jdText', r.keywords.text); }
+    lastResult = r;
+    render(r);
+    analyzeSay(r.ok ? `Verdict: ${r.verdict.label}, fit ${r.fit.score}% at threshold ${r.threshold.threshold}%` : `Could not analyze: ${r.message || r.error || 'unknown error'}`);
+  } catch (error) {
+    if (error && error.name === 'TimeoutError') {
+      analyzeSay(`Analyze timed out after ${ANALYZE_TIMEOUT_MS / 1000} s. The server may be busy or stopped; check the server window, then try again.`);
+    } else {
+      console.error('Analyze failed', error);
+      analyzeSay(`Analyze failed: ${error.message || error}. Check that the server is still running, then try again.`);
+    }
+  } finally { $('analyzeBtn').disabled = false; }
+}
+
+function render(r) {
+  const out = $('jdfcResults'); out.textContent = '';
+  if (!r.ok) { out.append(card('Could not analyze', h('p', { text: `${r.code || ''} ${r.message || r.error || ''}` }))); return; }
+  out.append(h('p', { class: 'muted', text: `${r.input.title || 'Untitled role'} · ${r.input.company || 'company not detected'}${r.input.location ? ' · ' + r.input.location : ''}` }));
+  out.append(renderSeen(r), renderVerdict(r), renderDirLevel(r), renderGates(r), renderFit(r), renderKeywords(r), renderBases(r), renderTailor(r), renderImprovements(r), renderHonesty(r), renderInterview(r), renderWhy(r), renderLog(r));
+}
+
+function renderSeen(r) {
+  const s = r.seenBefore;
+  const kind = { repeat: 'bad', same_company_new_role: 'info', previously_skipped: 'warn', pending: 'warn', held: 'warn', none: 'ok' }[s.status] || 'info';
+  const label = { repeat: 'Repeat: already applied', same_company_new_role: 'Same company, new role', previously_skipped: 'Skipped before', pending: 'Pending in checklist', held: 'Held before', none: 'Not seen before' }[s.status];
+  const c = card('1. Seen before', pill(label, kind), s.note ? h('p', { class: 'small', text: s.note }) : null);
+  if (s.matches.length) c.append(h('table', {}, h('thead', {}, h('tr', {}, ['Status', 'Match', 'Resume', 'Fit', 'Log line'].map((x) => h('th', { scope: 'col', text: x })))),
+    h('tbody', {}, s.matches.map((m) => h('tr', {}, h('td', { text: m.status }), h('td', { text: `${Math.round(m.score * 100)}%${m.sameRole ? ' same role' : ''}` }), h('td', { text: m.resume || '-' }), h('td', { text: m.fit ? `~${m.fit}%` : '-' }), h('td', { class: 'small', text: m.line }))))));
+  if (s.followUp) c.append(h('h3', { text: 'Suggested follow-up instead of reapplying' }), h('pre', { text: s.followUp }), h('button', { class: 'btn secondary', type: 'button', onclick: (e) => copy(s.followUp, e.target) }, 'Copy follow-up'));
+  return c;
+}
+
+let userChoice = null;
+let lastGen = null;
+function renderVerdict(r) {
+  const v = r.verdict;
+  const c = card('2. Verdict', h('div', {}, h('span', { class: `verdict-big pill ${VERDICT_KIND[v.key] || 'info'}`, text: v.label })), h('p', { text: v.reason }));
+  c.append(h('div', { class: 'scorebox', role: 'group', 'aria-label': 'Scores' },
+    h('div', {}, 'Baseline fit', h('b', { text: `${v.score.baseline}%` })),
+    h('div', {}, 'After honest edits', h('b', { text: `${v.score.projected}%` })),
+    h('div', {}, 'Threshold T', h('b', { text: `${v.threshold}%` })),
+    h('div', {}, 'Gap to T', h('b', { text: `${v.score.gapToThreshold} pts` }))));
+  const b = v.bands;
+  c.append(h('p', { class: 'small muted' }, `Bands at T=${b.threshold}: Apply ${b.apply}; ${b.tailor}; ${b.hold}; ${b.skip}.`));
+  if (v.gapReasons && v.gapReasons.length) {
+    c.append(h('h3', { text: 'Gap that cannot be honestly closed by editing (prep for interview instead)' }),
+      h('ul', {}, v.gapReasons.map((g) => h('li', {}, h('b', { text: g.gap }), ` (${g.status}) — ${g.why || ''}`, h('br'), h('span', { class: 'small', text: `Bridge: ${g.bridge}` })))));
+  }
+  if (v.needsUserDecision) {
+    c.append(h('h3', { text: 'Your call' }));
+    const opts = h('div', { class: 'options', role: 'group', 'aria-label': 'Decision options' });
+    for (const o of v.userOptions) opts.append(h('button', { class: 'btn secondary', type: 'button', 'aria-pressed': String(userChoice === o), onclick: () => { userChoice = o; render(lastResult); say(`Decision recorded in the log draft: ${o}`); if (/salvaged/.test(o)) { const gb = document.getElementById('jdfcGenBox'); if (gb) startGenerate(gb); } } }, o));
+    c.append(opts, h('p', { class: 'small muted', text: 'The tool does not auto-decide here; your choice updates the log entry draft below.' }));
+  }
+  return c;
+}
+
+function renderDirLevel(r) {
+  const d = r.direction; const l = r.level;
+  const dk = d.class === 'target' ? 'ok' : d.class === 'avoid' ? 'bad' : 'warn';
+  const lk = l.class === 'ok' ? 'ok' : l.class === 'stretch' ? 'warn' : 'bad';
+  const red = r.redFlags.length ? h('p', {}, h('b', { text: 'Red flags: ' }), r.redFlags.map((f) => `${f.label} (${f.hits.join(', ')})`).join('; ')) : null;
+  return h('div', { class: 'grid2' },
+    card('3. Direction check', pill(`${d.class}: ${d.label}`, dk), h('p', { text: d.why })),
+    card('4. Level check', pill(l.class.replace('_', ' '), lk), h('p', { text: l.why }), l.notes.map((n) => h('p', { class: 'small', text: `⚠ ${n}` })), red));
+}
+
+function renderGates(r) {
+  return card('5. Gates (must-haves)', r.gates.length ? h('table', {}, h('thead', {}, h('tr', {}, ['Gate', 'Requirement', 'Required?', 'Status', 'Evidence'].map((x) => h('th', { scope: 'col', text: x })))),
+    h('tbody', {}, r.gates.map((g) => h('tr', {}, h('td', { text: g.category }), h('td', { text: g.requirement }), h('td', { text: g.required ? 'required' : 'preferred' }), h('td', {}, pill(g.status.replace('_', ' ') + (g.hard ? ' (hard)' : ''), STATUS_KIND[g.status])), h('td', { class: 'small', text: g.evidence })))))
+    : h('p', { text: 'No explicit gates detected.' }));
+}
+
+const SHORT_JD_WORDS = 80; // below this the keyword sample is too small for the % to mean much (scores are not changed)
+function renderFit(r) {
+  const f = r.fit;
+  const words = String((r.keywords && r.keywords.text) || '').split(/\s+/).filter(Boolean).length;
+  const short = words < SHORT_JD_WORDS ? h('p', {}, pill('JD too short to score reliably', 'warn'), ` Only ${words} words: paste the full job description (about ${SHORT_JD_WORDS}+ words) for a trustworthy score.`) : null;
+  return card(`6. % fit: ${f.score}%`, short, h('p', { class: 'small muted', text: f.formula }),
+    h('table', {}, h('thead', {}, h('tr', {}, ['Component', 'Weight', 'Score (0-1)', 'Points', 'Why'].map((x) => h('th', { scope: 'col', text: x })))),
+      h('tbody', {}, f.breakdown.map((b) => h('tr', {}, h('td', { text: b.component }), h('td', { text: b.weight }), h('td', { text: b.score01 }), h('td', { text: b.points }), h('td', { class: 'small', text: b.why }))),
+        f.penalties.map((p) => h('tr', {}, h('td', { text: 'Penalty' }), h('td', { text: '' }), h('td', { text: '' }), h('td', { text: p.points }), h('td', { class: 'small', text: p.reason }))))));
+}
+
+function renderKeywords(r) {
+  const k = r.keywords;
+  const c = card(`7. Keyword match (ATS-style): ${k.coverage.best.pct}% for ${k.coverage.best.base}`);
+  c.append(h('div', { class: 'grid2' },
+    h('div', {}, h('h3', { text: `Matched (${k.coverage.best.matched.length})` }), h('p', { class: 'small', text: k.coverage.best.matched.join(', ') || '-' })),
+    h('div', {}, h('h3', { text: `Missing (${k.coverage.best.missing.length})` }), h('p', { class: 'small', text: k.coverage.best.missing.join(', ') || '-' }))));
+  c.append(h('h3', { text: 'JD keywords' }), h('p', { class: 'small' }, k.jd.map((x) => h('span', { class: `pill ${STATUS_KIND[x.status]}`, style: 'margin:2px', title: `${x.section}${x.mustHave ? ', must-have' : ''}` }, `${x.canonical}${x.mustHave ? ' *' : ''}: ${x.status}`))));
+  c.append(h('h3', { text: 'Highlighted JD' }), h('p', { class: 'legend small' },
+    h('span', { class: 'hl-matched', text: 'matched (solid)' }), h('span', { class: 'hl-supportable', text: 'missing but honestly supportable (dashed)' }), h('span', { class: 'hl-unsupported', text: 'missing, not supported (dotted)' }), h('span', { class: 'hl-redflag', text: 'red flag (boxed)' })));
+  const view = h('div', { class: 'jdview', tabindex: '0', 'aria-label': 'Job description with highlighted keywords' });
+  let pos = 0;
+  for (const s of k.highlights) {
+    if (s.start > pos) view.append(k.text.slice(pos, s.start));
+    view.append(h('mark', { class: `hl-${s.status}`, title: `${s.canonical || s.label || ''}: ${s.status}` }, k.text.slice(s.start, s.end)));
+    pos = s.end;
+  }
+  view.append(k.text.slice(pos));
+  c.append(view);
+  c.append(h('details', {}, h('summary', { text: 'Coverage per resume' }), h('table', {}, h('tbody', {}, k.coverage.perResume.map((p) => h('tr', {}, h('td', { text: p.name }), h('td', { text: p.label }), h('td', { text: `${p.pct}%` })))))));
+  return c;
+}
+
+function renderBases(r) {
+  const b = r.bases;
+  return card(`8. Nearest base resume: ${b.recommended}`, b.caveat ? h('p', { class: 'small', text: `Base-map caveat: ${b.caveat}` }) : null,
+    b.submittedTop ? h('p', { class: 'small', text: `Closest submitted copy (reference only): ${b.submittedTop} — submitted copy - do not edit` }) : null,
+    h('table', {}, h('thead', {}, h('tr', {}, ['Resume', 'Kind', 'Score', 'Keywords', 'Family', 'Why'].map((x) => h('th', { scope: 'col', text: x })))),
+      h('tbody', {}, b.ranked.map((x) => h('tr', {}, h('td', { text: x.name }), h('td', {}, pill(x.label, x.kind === 'base' ? 'ok' : 'warn')), h('td', { text: x.score }), h('td', { text: `${x.keywordPct}%` }), h('td', { text: `${x.familyScore}%` }), h('td', { class: 'small', text: x.why }))))));
+}
+
+function renderTailor(r) {
+  const t = r.tailor;
+  const c = card('9. Tailor decision', pill(t.decision === 'tailor' ? (t.outcome === 'salvage' ? 'Tailor (salvage)' : 'Tailor (light)') : 'Reuse base as-is', t.decision === 'tailor' ? 'info' : 'ok'), h('p', { text: t.reason }));
+  c.append(h('p', { class: 'small' }, `Baseline ${t.baselineFit}% → projected ${t.projectedFit}% after honest edits (single pass, ${t.scoringCalls} re-score) vs T ${t.threshold}%.`));
+  if (t.edits.length) c.append(h('ul', {}, t.edits.map((e) => h('li', { class: 'small' }, h('b', { text: e.kind }), `: ${e.why}`))));
+  const show = t.replacements.length ? t.replacements : t.optionalReplacements;
+  if (show.length) {
+    const json = JSON.stringify(show, null, 2);
+    c.append(h('h3', { text: t.replacements.length ? 'Replacements JSON (tailor-resume.ps1 format)' : 'Optional replacements (not required by the rule)' }), h('pre', { text: json }),
+      h('div', { class: 'options' },
+        h('button', { class: 'btn secondary', type: 'button', onclick: (e) => copy(json, e.target) }, 'Copy JSON'),
+        h('button', { class: 'btn secondary', type: 'button', onclick: async (e) => { const s = await api('/api/tailor-json', { slug: t.slug, replacements: show }); say(s.ok ? `Saved ${s.path}` : s.error); e.target.textContent = s.ok ? 'Saved' : 'Save failed'; } }, 'Save JSON to the profile\'s tailor-runs folder')));
+    if (t.command) c.append(h('details', {}, h('summary', { text: 'Manual command (optional; Generate runs the same script for you)' }), h('pre', { text: t.command }), h('button', { class: 'btn secondary', type: 'button', onclick: (e) => copy(t.command, e.target) }, 'Copy command'), h('p', { class: 'small muted', text: `Exit codes: ${t.exitCodes}` })));
+  }
+  const genBox = h('div', { id: 'jdfcGenBox', 'aria-live': 'polite' });
+  const scored = t.edits.filter((e) => e.kind !== 'optional-domain');
+  if (scored.length && !['skip', 'skip_repeat'].includes(r.verdict.key)) {
+    c.append(h('h3', { text: 'Generate the tailored resume (new file; the base is not touched)' }),
+      h('button', { class: 'btn', type: 'button', onclick: () => startGenerate(genBox) }, r.verdict.key === 'tailor_salvage' ? 'Generate salvaged resume' : 'Generate resume'));
+  } else if (r.bases.recommended) {
+    c.append(h('p', { class: 'small' }, 'No honest edits to make: use the base as-is. ', h('a', { href: `${urlBase()}/download/${encodeURIComponent(r.bases.ranked.find((x) => x.name === r.bases.recommended).fileName)}` }, 'Download the base'), '.'));
+  }
+  c.append(genBox);
+  if (lastGen) renderGen(genBox, lastGen);
+  for (const n of t.notes) c.append(h('p', { class: 'small', text: `Note: ${n}` }));
+  return c;
+}
+
+async function startGenerate(box) {
+  box.textContent = 'Generating… (Word page check can take 30-120 s)';
+  const st = await api('/api/generate', { jdText: lastInput.jdText, company: lastInput.company, title: lastInput.title, threshold: getT() });
+  if (!st.ok) { box.textContent = st.error || 'Could not start.'; return; }
+  for (let i = 0; i < 200; i++) {
+    await new Promise((res) => setTimeout(res, 2000));
+    const j = await api(`/api/jobs/${st.jobId}`);
+    if (j.status !== 'running') { lastGen = j.result; renderGen(box, j.result); loadPending(); return; }
+  }
+  box.textContent = 'Still running; check the Repository tab later.';
+}
+function renderGen(box, g) {
+  box.textContent = '';
+  box.append(h('p', {}, pill(g.ok ? 'Generated' : g.status, g.ok ? 'ok' : 'warn'), ' ', g.message || ''));
+  for (const a of g.attempts || []) box.append(h('p', { class: 'small', text: `Attempt ${a.attempt}: exit ${a.code} (${a.meaning}); replacements applied ${a.report.replacementsApplied}; protected tokens: ${a.report.protectedTokens || '-'}; forbidden scan: ${a.report.forbiddenScan || '-'}; pages: ${a.report.pages || '-'}` }));
+  for (const d of g.dropped || []) box.append(h('p', { class: 'small', text: `Dropped edit (${d.reason}): "${d.new}"` }));
+  if (g.finalVerdictNote) box.append(h('p', {}, h('b', { text: g.finalVerdictNote }), ' ', pill(g.meetsThreshold ? 'meets T' : 'below T', g.meetsThreshold ? 'ok' : 'warn')));
+  if (g.download) box.append(h('p', {}, h('a', { href: g.download }, `Download ${g.targetName}`), h('br'), h('span', { class: 'small', text: `Folder: ${g.folder} · ${g.absPath}` })));
+  else if (g.base) box.append(h('p', { class: 'small' }, h('a', { href: g.base.download }, `Download base ${g.base.file}`)));
+  if (g.targetName && g.ok) {
+    box.append(h('h3', { text: 'Did you apply?' }));
+    const send = async (answer) => {
+      let reason;
+      const where = profileLog === 'checklist' ? 'the checklist' : 'this profile\'s application log';
+      if (answer === 'skip') reason = window.prompt(`Reason for skipping (goes into ${where}):`, 'user decision');
+      if (!window.confirm(`Log a "${answer}" entry in ${where}?${profileLog === 'checklist' ? ' A .bak copy is made first.' : ''}`)) return;
+      const r = await api('/api/application', { answer, confirm: true, company: g.company, title: g.title, resumeFile: g.targetName, fit: g.finalFit, baseline: g.baselineFit, threshold: g.threshold, gaps: (g.gaps || []).slice(0, 4), reason });
+      box.append(h('p', { class: 'small', text: r.ok ? `Logged: ${r.line}${r.backupPath ? ` (backup ${r.backupPath})` : ''}` : `Failed: ${r.error}` }));
+      loadPending();
+    };
+    box.append(h('div', { class: 'options' }, h('button', { class: 'btn', type: 'button', onclick: () => send('applied') }, 'Yes, applied'), h('button', { class: 'btn secondary', type: 'button', onclick: () => send('pending') }, 'Not yet'), h('button', { class: 'btn secondary', type: 'button', onclick: () => send('skip') }, 'Decided to skip')));
+  }
+}
+async function loadPending() {
+  const r = await api('/api/pending'); const el = $('pendingList'); el.textContent = '';
+  if (!r.pending.length) { el.textContent = 'None.'; return; }
+  for (const p of r.pending) el.append(h('div', {}, `${p.file}${p.last ? ' (' + p.last.status + ')' : ''}`));
+}
+
+function renderImprovements(r) {
+  const i = r.improvements;
+  return card('10. Suggested improvements',
+    h('h3', { text: 'a) Add to resume (supported by evidence)' }), i.add.length ? h('ul', {}, i.add.map((a) => h('li', { class: 'small', text: a.suggestion }))) : h('p', { class: 'small', text: 'Nothing to add: everything supportable is already there.' }),
+    h('h3', { text: 'b) Do NOT claim — prep for interview instead' }), i.doNotClaim.length ? h('ul', {}, i.doNotClaim.map((d) => h('li', { class: 'small' }, h('b', { text: d.keyword }), ` — ${d.reason} Bridge: ${d.bridge}`))) : h('p', { class: 'small', text: 'None.' }),
+    h('h3', { text: 'c) Work samples to attach' }), i.workSamples.length ? h('ul', {}, i.workSamples.map((w) => h('li', { class: 'small' }, `${w.title} (${w.file}${w.exists ? '' : ', file not found'}) — ${w.why}${w.note ? ' · ' + w.note : ''}`))) : h('p', { class: 'small', text: 'None matched.' }));
+}
+
+function renderHonesty(r) {
+  const x = r.honesty;
+  return card('11. Honesty guard', pill(x.ok ? 'All suggestions pass' : `${x.flags.length} flag(s)`, x.ok ? 'ok' : 'bad'), h('p', { class: 'small', text: x.why }),
+    x.flags.length ? h('ul', {}, x.flags.map((f) => h('li', { class: 'small', text: `${f.source}: ${f.message} ("${f.excerpt}")` }))) : null,
+    x.doNotClaimInJd.length ? h('p', { class: 'small', text: `JD asks for forbidden-to-claim items: ${x.doNotClaimInJd.join(', ')}` }) : null);
+}
+
+function renderInterview(r) {
+  return card('12. Interview prep', h('ol', {}, r.interview.map((q) => h('li', {}, h('b', { text: q.question }), h('br'), h('span', { class: 'small', text: `Honest bridge: ${q.bridge}` })))));
+}
+
+function renderWhy(r) {
+  const c = card(`"Why this role" draft (${r.whyRole.words} words, evidence only)`, h('p', { text: r.whyRole.text }));
+  c.append(h('button', { class: 'btn secondary', type: 'button', onclick: (e) => copy(r.whyRole.text, e.target) }, 'Copy'));
+  if (r.repost && r.repost.isRepost) c.append(h('p', {}, pill('Repost?', 'warn'), ' ', r.repost.why));
+  return c;
+}
+
+function renderLog(r) {
+  let line = r.logEntry.line;
+  if (userChoice) line = line.replace(/^- \*\*(\d{4}-\d{2}-\d{2}) - [^:]+:\*\*/, `- **$1 - ${userChoice.replace(/[*:]/g, '')}:**`);
+  const pre = h('pre', { text: line });
+  const c = card('13. Log entry draft', pre);
+  c.append(h('div', { class: 'options' },
+    h('button', { class: 'btn secondary', type: 'button', onclick: (e) => copy(line, e.target) }, 'Copy'),
+    // Checklist-only: profiles that log to data\applications.json record via "Did you apply?" instead.
+    profileLog !== 'checklist' || !r.logEntry.checklistPath ? null : h('button', { class: 'btn danger', type: 'button', onclick: async () => {
+      if (!window.confirm(`Append this line to:\n${r.logEntry.checklistPath}\n\nA timestamped .bak copy is made first.\n\n${line}`)) { say('Append cancelled.'); return; }
+      const s = await api('/api/checklist/append', { line, confirm: true });
+      say(s.ok ? `Appended. Backup: ${s.backupPath}` : `Append failed: ${s.error}`);
+      c.append(h('p', { class: 'small', text: s.ok ? `Appended. Backup: ${s.backupPath}` : `Append failed: ${s.error}` }));
+    } }, 'Append to checklist…')));
+  return c;
+}
+
+// ---------------- compare / history / calibration
+on('cmpBtn', 'click', async () => {
+  const r = await api('/api/compare', { a: { jdText: rawVal('cmpA') }, b: { jdText: rawVal('cmpB') }, threshold: getT() });
+  const o = $('cmpOut'); o.textContent = '';
+  if (!r.a.ok || !r.b.ok) { o.append(card('Compare', h('p', { text: (r.a.message || '') + ' ' + (r.b.message || '') }))); return; }
+  const row = (label, fa, fb) => h('tr', {}, h('th', { scope: 'row', text: label }), h('td', { text: fa }), h('td', { text: fb }));
+  o.append(card('Side by side', h('table', {}, h('thead', {}, h('tr', {}, h('th', { text: '' }), h('th', { scope: 'col', text: 'A' }), h('th', { scope: 'col', text: 'B' }))),
+    h('tbody', {}, row('Role', `${r.a.input.title} @ ${r.a.input.company}`, `${r.b.input.title} @ ${r.b.input.company}`), row('Verdict', r.a.verdict.label, r.b.verdict.label), row('Fit', `${r.a.fit.score}%`, `${r.b.fit.score}%`),
+      row('Direction', r.a.direction.label, r.b.direction.label), row('Level', r.a.level.class, r.b.level.class), row('Best base', r.a.bases.recommended, r.b.bases.recommended), row('Keyword coverage', `${r.a.keywords.coverage.best.pct}%`, `${r.b.keywords.coverage.best.pct}%`))),
+    h('p', { class: 'small', text: `Shared keywords: ${r.overlap.sharedKeywords.join(', ') || '-'}` }), h('p', { class: 'small', text: `Only A: ${r.overlap.onlyA.join(', ') || '-'}` }), h('p', { class: 'small', text: `Only B: ${r.overlap.onlyB.join(', ') || '-'}` })));
+});
+on('histBtn', 'click', async () => {
+  const r = await api('/api/history'); const o = $('histOut'); o.textContent = '';
+  if (!r.entries.length) { o.append(h('p', { text: 'No checks yet.' })); return; }
+  o.append(h('table', {}, h('thead', {}, h('tr', {}, ['Date', 'Company', 'Role', 'Verdict', 'Fit', 'Base'].map((x) => h('th', { scope: 'col', text: x })))),
+    h('tbody', {}, r.entries.map((e) => h('tr', {}, h('td', { text: e.date.slice(0, 16).replace('T', ' ') }), h('td', { text: e.company || '-' }), h('td', { text: e.title || '-' }), h('td', { text: e.verdict }), h('td', { text: `${e.fit}%` }), h('td', { text: e.base }))))));
+});
+on('repoBtn', 'click', async () => {
+  const r = await api('/api/repo'); const o = $('repoOut'); o.textContent = '';
+  o.append(h('p', { class: 'small', text: `Refreshed ${r.refreshedAt}` }));
+  o.append(h('table', {}, h('thead', {}, h('tr', {}, ['File', 'Type', 'Derived from', 'Modified', 'Applied to', 'Missing evidence', 'Stale'].map((x) => h('th', { scope: 'col', text: x })))),
+    h('tbody', {}, r.records.map((x) => h('tr', {}, h('td', { text: x.file }), h('td', {}, pill(x.type, x.type === 'base' ? 'ok' : x.type === 'generated-pending' ? 'info' : 'warn')), h('td', { text: x.derivedFrom || '-' }), h('td', { text: String(x.modifiedAt || '').slice(0, 10) }),
+      h('td', { class: 'small', text: (x.appliedTo || []).map((a) => `${a.company}${a.date ? ' ' + a.date : ''}${a.status ? ' (' + a.status + ')' : ''}`).join('; ') || '-' }), h('td', { class: 'small', text: (x.missingEvidence || []).join(', ') || '-' }), h('td', { text: (x.stale || []).length ? 'stale: ' + x.stale.join(', ') : '-' }))))));
+});
+async function loadEvidence() {
+  const r = await api('/api/evidence'); const o = $('evOut'); o.textContent = '';
+  o.append(h('h2', { text: 'Evidence bank' }), h('table', {}, h('thead', {}, h('tr', {}, ['Id', 'Claim', 'Added', 'Bases lacking it', ''].map((x) => h('th', { scope: 'col', text: x })))),
+    h('tbody', {}, r.evidence.map((e) => h('tr', {}, h('td', { text: e.id }), h('td', { class: 'small', text: e.claim }), h('td', { text: e.dateAdded || '-' }), h('td', { class: 'small', text: e.staleBases.map((b) => b.name).join(', ') || (e.detect ? 'none' : 'n/a (no detect pattern)') }),
+      h('td', {}, e.detect ? h('button', { class: 'btn secondary', type: 'button', onclick: () => showPickList(e.id, false) }, 'Resumes missing this…') : null))))));
+}
+async function showPickList(id, showAll) {
+  const box = $('pickOut'); box.classList.remove('hidden'); box.textContent = 'Loading…';
+  const r = await api(`/api/evidence/candidates?id=${encodeURIComponent(id)}&showAll=${showAll ? 1 : 0}`);
+  box.textContent = '';
+  box.append(h('h2', { text: `Resumes missing "${id}" (${r.rows.length})` }));
+  if (r.note) box.append(h('p', { class: 'small', text: r.note }));
+  const incl = h('input', { type: 'checkbox', id: 'pickIncl' });
+  const all = h('input', { type: 'checkbox', id: 'pickAllRel', checked: showAll || null });
+  all.addEventListener('change', () => showPickList(id, all.checked));
+  box.append(h('div', { class: 'row' }, h('div', {}, h('label', {}, incl, ' Include submitted copies (promoted once to _v2; originals never edited)')), h('div', {}, h('label', {}, all, ' Show non-relevant role families too'))));
+  const boxes = [];
+  const tbody = h('tbody', {}, r.rows.map((row) => {
+    const cb = h('input', { type: 'checkbox', 'aria-label': `Select ${row.file}`, disabled: row.proposed ? null : true });
+    cb.dataset.file = row.file; cb.dataset.base = row.isBase ? '1' : '0';
+    boxes.push(cb);
+    return h('tr', {}, h('td', {}, cb), h('td', { text: row.file }), h('td', {}, pill(row.type, row.isBase ? 'ok' : 'warn'), row.nearDuplicateOf ? h('div', { class: 'small', text: `near-duplicate of ${row.nearDuplicateOf}` }) : null), h('td', { text: row.family || '-' }), h('td', { text: String(row.modifiedAt || '').slice(0, 10) }),
+      h('td', { class: 'small', text: row.sentTo || '-' }), h('td', { class: 'small', text: row.proposed ? `${row.proposed.location}: "${row.proposed.old}" → "${row.proposed.new}"` : row.action }), h('td', { text: row.pageRisk }), h('td', { class: 'small', text: row.action }));
+  }));
+  const setAll = (v) => boxes.forEach((b) => { if (!b.disabled && (b.dataset.base === '1' || incl.checked)) b.checked = v; else if (!v) b.checked = false; });
+  box.append(h('div', { class: 'options' }, h('button', { class: 'btn secondary', type: 'button', onclick: () => setAll(true) }, 'Select all'), h('button', { class: 'btn secondary', type: 'button', onclick: () => setAll(false) }, 'Clear all')));
+  box.append(h('table', {}, h('thead', {}, h('tr', {}, ['', 'File', 'Type', 'Role family', 'Modified', 'Sent to', 'Proposed insertion', 'Page risk', 'Action'].map((x) => h('th', { scope: 'col', text: x })))), tbody));
+  const status = h('div', { 'aria-live': 'polite' });
+  box.append(h('button', { class: 'btn', type: 'button', style: 'margin-top:10px', onclick: async () => {
+    const files = boxes.filter((b) => b.checked).map((b) => b.dataset.file);
+    if (!files.length) { say('Select at least one resume.'); return; }
+    const pv = await api('/api/evidence/propagate/preview', { evidenceId: id, files, includeSubmitted: incl.checked, showAll });
+    if (!pv.ok) { status.textContent = pv.error; return; }
+    const lines = pv.plan.map((x) => `• ${x.file}: ${x.action}\n   "${x.proposed.old}" → "${x.proposed.new}"`).join('\n');
+    if (!window.confirm(`${pv.summary}\n\n${lines}\n\nRun these updates now?`)) { status.textContent = 'Cancelled; nothing changed.'; return; }
+    const st = await api('/api/evidence/propagate', { confirmToken: pv.confirmToken });
+    if (!st.ok) { status.textContent = st.error; return; }
+    status.textContent = 'Running…';
+    for (let i = 0; i < 300; i++) {
+      await new Promise((res) => setTimeout(res, 2000));
+      const j = await api(`/api/jobs/${st.jobId}`);
+      if (j.status === 'running') continue;
+      status.textContent = '';
+      const res = j.result || {};
+      status.append(h('p', {}, h('b', { text: res.summary || res.message || j.status })), h('ul', {}, (res.results || []).map((x) => h('li', { class: 'small', text: `${x.file}: ${x.message}` }))));
+      loadEvidence();
+      return;
+    }
+  } }, 'Update selected…'), status);
+}
+on('evAdd', 'click', async () => {
+  const split = (v) => v.split(',').map((x) => x.trim()).filter(Boolean);
+  const item = { id: val('evId'), claim: val('evClaim'), skillLabel: val('evSkill') || undefined, dateAdded: val('evDate') || undefined, keywords: split(val('evKeywords')), detect: val('evDetect') || undefined, appliesTo: split(val('evFamilies')) };
+  const r = await api('/api/evidence', { item });
+  $('evMsg').textContent = r.ok ? `Added "${r.item.id}". Bases lacking it: ${r.staleBases.map((b) => b.name).join(', ') || 'none'}` : r.error;
+  if (r.ok) loadEvidence();
+});
+on('jdfcTab-evidence', 'click', loadEvidence);
+function barChart(rows, label) {
+  const W = 640, H = 160, pad = 24;
+  const max = Math.max(1, ...rows.map((r) => Math.max(r.screened, r.applied)));
+  const ns = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(ns, 'svg');
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('role', 'img'); svg.setAttribute('aria-label', label); svg.style.width = '100%'; svg.style.maxWidth = '720px';
+  const bw = rows.length ? Math.min(40, (W - pad * 2) / rows.length / 2.2) : 0;
+  rows.forEach((r, i) => {
+    const x = pad + i * ((W - pad * 2) / Math.max(1, rows.length));
+    [['screened', '#1d4ed8', 0], ['applied', '#166534', bw + 2]].forEach(([k, color, off]) => {
+      const hgt = ((H - pad * 2) * r[k]) / max;
+      const rect = document.createElementNS(ns, 'rect');
+      rect.setAttribute('x', x + off); rect.setAttribute('y', H - pad - hgt); rect.setAttribute('width', bw); rect.setAttribute('height', hgt); rect.setAttribute('fill', color);
+      const t = document.createElementNS(ns, 'title'); t.textContent = `${r.week}: ${r[k]} ${k}`; rect.append(t);
+      svg.append(rect);
+    });
+    const tx = document.createElementNS(ns, 'text'); tx.setAttribute('x', x); tx.setAttribute('y', H - 6); tx.setAttribute('font-size', '10'); tx.setAttribute('fill', '#334155'); tx.textContent = r.week.slice(5); svg.append(tx);
+  });
+  return svg;
+}
+async function loadStats() {
+  const r = await api(`/api/stats?range=${encodeURIComponent(val('statsRange') || 'all')}&threshold=${getT()}`); const o = $('statsOut'); o.textContent = '';
+  const t = r.totals;
+  const kv = (rows) => h('table', {}, h('tbody', {}, rows.map(([k, v]) => h('tr', {}, h('th', { scope: 'row', text: k }), h('td', { text: String(v) })))));
+  o.append(h('div', { class: 'grid2' },
+    card('Totals', kv([['Checklist items screened', t.screened], ['Tool checks (history)', t.toolChecks], ['Applied (confirmed)', t.applied], ['Pending confirmation', t.pending], ['Held', t.held], ['Repeats', t.repeat], ['Skipped', t.skipped]]),
+      h('h3', { text: 'Skipped by reason' }), kv(r.topSkipReasons.map((x) => [x.reason, x.count]))),
+    card('Repeat rate', h('p', {}, h('b', { text: `${r.repeatRate.checklist}%` }), ' of logged items were repeats; ', h('b', { text: `${r.repeatRate.tool}%` }), ' of tool checks.'), h('p', { class: 'small', text: r.repeatRate.why }))));
+  o.append(card('Weekly trend (screened = blue, applied = green)', barChart(r.trend, 'Screened and applied per week'),
+    h('table', {}, h('thead', {}, h('tr', {}, ['Week', 'Screened', 'Applied'].map((x) => h('th', { scope: 'col', text: x })))), h('tbody', {}, r.trend.map((w) => h('tr', {}, h('td', { text: w.week }), h('td', { text: w.screened }), h('td', { text: w.applied }))),
+      h('tr', {}, h('td', { text: 'undated' }), h('td', { text: r.undated.screened }), h('td', { text: r.undated.applied }))))));
+  const f = r.fit;
+  o.append(h('div', { class: 'grid2' },
+    card('Fit distribution (tool checks)', h('table', {}, h('thead', {}, h('tr', {}, h('th', { text: 'Strict fit' }), h('th', { text: 'Checks' }))), h('tbody', {}, f.histogram.map((b) => h('tr', {}, h('td', { text: b.bucket }), h('td', { text: b.count }))))),
+      h('p', { class: 'small', text: `Average baseline ${f.averageBaseline ?? '-'}%, after honest edits ${f.averageAfterEdits ?? '-'}%. At T=${f.threshold}: ${f.outcomes.reachesThreshold} reach, ${f.outcomes.salvage} salvage, ${f.outcomes.hold} hold, ${f.outcomes.apply} apply as-is, ${f.outcomes.skip} skip.` })),
+    card('Top missing gaps', r.topGaps.length ? h('table', {}, h('tbody', {}, r.topGaps.map((g) => h('tr', {}, h('td', { text: g.gap }), h('td', { text: g.count }), h('td', { text: g.queuedAsEvidence ? 'already in evidence' : '-' }))))) : h('p', { class: 'small', text: 'No tool checks with gaps yet.' }))));
+  const u = r.resumeUsage;
+  o.append(h('div', { class: 'grid2' },
+    card('Resume usage', h('p', { class: 'small', text: `Stale bases: ${u.staleCount}${u.staleBases.length ? ' (' + u.staleBases.join(', ') + ')' : ''}. Most reused base: ${u.mostReusedBase ? u.mostReusedBase.name + ' (' + u.mostReusedBase.uses + ')' : '-'}.` }), kv(u.applicationsPerResume.slice(0, 15).map((x) => [x.name, x.count]))),
+    card('Pending confirmation', r.pending.length ? h('ul', {}, r.pending.map((p) => h('li', { class: 'small', text: `${p.item}${p.resume ? ' (' + p.resume + ')' : ''}${p.date ? ' · ' + p.date : ''} [${p.source}]` }))) : h('p', { class: 'small', text: 'None.' }))));
+  o.append(card('Companies applied to', kv(r.companiesApplied.map((c) => [c.company, `${c.count} (${c.dates.join(', ')})`]))));
+}
+on('statsBtn', 'click', loadStats);
+on('statsRange', 'change', loadStats);
+on('jdfcTab-stats', 'click', loadStats);
+on('calBtn', 'click', async () => {
+  const r = await api(`/api/calibration?threshold=${getT()}`); const o = $('calOut'); o.textContent = '';
+  o.append(h('p', {}, pill(r.rank.ok ? 'Rank order preserved' : 'Rank order violated', r.rank.ok ? 'ok' : 'bad'), ' ', r.rank.groups.map((g) => `G${g.group}: ${g.fixtures.join(', ')}`).join('  >  ')));
+  o.append(h('table', {}, h('thead', {}, h('tr', {}, ['Fixture', 'Historical estimate', 'Strict score', 'After edits', 'Historical verdict', `Verdict @T=${r.threshold}`, 'Verdict @T=55', 'Expected base', 'Actual base', 'Checks'].map((x) => h('th', { scope: 'col', text: x })))),
+    h('tbody', {}, r.rows.map((x) => h('tr', {}, h('td', { text: x.fixture }), h('td', { text: `~${x.expected.historicalFit}%` }), h('td', { text: `${x.strict.fit}%` }), h('td', { text: `${x.strict.projected}%` }), h('td', { text: x.expected.historicalVerdict }), h('td', { text: x.strict.verdict }), h('td', { text: x.atT55.verdict }), h('td', { text: x.expected.base || '(not asserted)' }), h('td', { text: x.strict.base }), h('td', {}, pill(x.pass ? 'pass' : 'fail', x.pass ? 'ok' : 'bad'), x.flagFails.length ? h('div', { class: 'small', text: x.flagFails.join('; ') }) : null))))));
+});
+initProfiles().catch((error) => reportInitError('profile loading', error));
+</script>
+</body>
+</html>

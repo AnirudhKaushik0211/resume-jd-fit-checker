@@ -1,0 +1,12 @@
+{
+ "version": 1,
+ "records": {
+  "Demo_PM_BASE_General.docx": { "file": "Demo_PM_BASE_General.docx", "name": "PM_BASE_General", "type": "base", "derivedFrom": null, "family": "Product management (consumer / e-commerce)", "appliedTo": [], "createdAt": "2026-01-10T09:00:00.000Z" },
+  "Demo_PM_Fintech_Payments.docx": { "file": "Demo_PM_Fintech_Payments.docx", "name": "PM_Fintech_Payments", "type": "base", "derivedFrom": "PM_BASE_General", "family": "Product management (payments / fintech)", "appliedTo": [], "createdAt": "2026-02-01T09:00:00.000Z" },
+  "Demo_PM_Acme_Payments.docx": { "file": "Demo_PM_Acme_Payments.docx", "name": "PM_Acme_Payments", "type": "submitted copy", "derivedFrom": "PM_Fintech_Payments", "appliedTo": [{ "company": "Acme Payments", "role": "Acme Payments, Product Manager, Payments", "date": "2026-07-10", "source": "checklist" }], "createdAt": "2026-07-09T09:00:00.000Z" },
+  "Demo_PM_Acme_Payments_v2.docx": { "file": "Demo_PM_Acme_Payments_v2.docx", "name": "PM_Acme_Payments_v2", "type": "variant", "derivedFrom": "PM_Acme_Payments", "appliedTo": [], "createdAt": "2026-08-15T09:00:00.000Z" },
+  "Demo_Ops_BASE_Analytics.docx": { "file": "Demo_Ops_BASE_Analytics.docx", "name": "Ops_BASE_Analytics", "type": "base", "derivedFrom": null, "family": "Operations / analytics", "appliedTo": [], "createdAt": "2026-01-12T09:00:00.000Z" },
+  "Demo_Ops_Globex_Supply.docx": { "file": "Demo_Ops_Globex_Supply.docx", "name": "Ops_Globex_Supply", "type": "submitted copy", "derivedFrom": "Ops_BASE_Analytics", "appliedTo": [{ "company": "Globex", "role": "Globex, Supply Chain Analyst", "date": "2026-05-06", "source": "checklist" }], "createdAt": "2026-05-05T09:00:00.000Z" },
+  "Demo_PM_Initech_Growth.docx": { "file": "Demo_PM_Initech_Growth.docx", "name": "PM_Initech_Growth", "type": "generated-pending", "derivedFrom": "PM_BASE_General", "appliedTo": [], "createdAt": "2026-08-06T09:00:00.000Z" }
+ }
+}

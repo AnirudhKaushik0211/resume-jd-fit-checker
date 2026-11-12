@@ -1,0 +1,32 @@
+{
+  "id": "wingtip-sap",
+  "company": "Wingtip",
+  "title": "Product Owner, SAP S/4HANA Finance",
+  "logged": "Synthetic demo JD. Expected values were set from the first run of the tool on 2026-11 after a plausibility check (not a real historical judgment). Hard platform: hands-on SAP S/4HANA is a must-have and not held.",
+  "expected": {
+    "historicalVerdict": "skip",
+    "historicalFit": 40,
+    "verdictAtT55": [
+      "skip"
+    ],
+    "flags": {
+      "directionId": "po",
+      "gatesNotMet": [
+        "SAP"
+      ],
+      "alwaysSkip": true
+    }
+  },
+  "lines": [
+    "Product Owner, SAP S/4HANA Finance",
+    "Company: Wingtip",
+    "Location: Bengaluru",
+    "Responsibilities",
+    "- Own the backlog and write user stories for the finance module.",
+    "- Run sprint reviews with the delivery team.",
+    "Requirements",
+    "- Must have: 3+ years of hands-on SAP S/4HANA configuration.",
+    "- Experience as a product owner in agile teams.",
+    "- Strong Excel."
+  ]
+}

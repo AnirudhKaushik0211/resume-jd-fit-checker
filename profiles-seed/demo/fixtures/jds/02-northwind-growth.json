@@ -1,0 +1,39 @@
+{
+  "id": "northwind-growth",
+  "company": "Northwind Traders",
+  "title": "Product Manager, Growth",
+  "logged": "Synthetic demo JD. Expected values were set from the first run of the tool on 2026-11 after a plausibility check (not a real historical judgment). Salvage: the Figma must-have is backed by newer evidence (figma-prototyping) but missing from every resume; a skill swap fixes it, the mobile-app gap stays.",
+  "expected": {
+    "historicalVerdict": "tailor_salvage",
+    "historicalFit": 65,
+    "base": "PM_BASE_General",
+    "rankGroup": 2,
+    "verdictAtT55": [
+      "tailor_light",
+      "tailor_salvage"
+    ],
+    "flags": {
+      "level": "ok",
+      "mustHaveSupportable": [
+        "figma"
+      ]
+    }
+  },
+  "lines": [
+    "Product Manager, Growth",
+    "Company: Northwind Traders",
+    "Location: Bengaluru",
+    "What you'll do",
+    "- Own growth experiments across onboarding and checkout in our mobile app.",
+    "- Partner with design to prototype new flows and test them with users.",
+    "- Track funnel metrics and report on retention.",
+    "- Work with marketing on referral programs.",
+    "Must have",
+    "- Hands-on Figma prototyping skills.",
+    "- 3+ years in product management.",
+    "- Experience with mobile app growth and retention.",
+    "- Comfort with Amplitude or a similar product analytics tool.",
+    "Nice to have",
+    "- Experience with Braze or CleverTap."
+  ]
+}

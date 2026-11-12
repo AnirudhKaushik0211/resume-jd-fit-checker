@@ -1,0 +1,5 @@
+{
+  "_comment": "links: per keyword id, the evidence ids (and optional forbidden-claim id) of this profile. add: extra keyword objects.",
+  "links": {},
+  "add": []
+}

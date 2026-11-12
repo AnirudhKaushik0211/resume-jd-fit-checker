@@ -1,0 +1,1250 @@
+{
+  "_comment": "Generic keyword taxonomy shipped with the tool. Evidence links and forbidden-claim links live in each profile (config/keywords-overrides.json).",
+  "keywords": [
+    {
+      "id": "product_discovery",
+      "canonical": "Product Discovery",
+      "synonyms": [
+        "product discovery",
+        "continuous discovery",
+        "discovery research",
+        "discovery & strategy",
+        "discovery and strategy"
+      ],
+      "category": "method",
+      "evidence": []
+    },
+    {
+      "id": "user_research",
+      "canonical": "User research",
+      "synonyms": [
+        "user research",
+        "customer research",
+        "user interviews",
+        "customer interviews",
+        "customer insights",
+        "user insights",
+        "voice of the user"
+      ],
+      "category": "method",
+      "evidence": []
+    },
+    {
+      "id": "customer_discovery_interviews",
+      "canonical": "Customer-discovery interviews",
+      "synonyms": [
+        "customer discovery interviews",
+        "discovery interviews",
+        "customer discovery"
+      ],
+      "category": "method",
+      "evidence": []
+    },
+    {
+      "id": "experimentation",
+      "canonical": "Experimentation (A/B testing)",
+      "synonyms": [
+        "a/b testing",
+        "a/b test",
+        "a/b tests",
+        "ab testing",
+        "ab test",
+        "experimentation",
+        "experiments",
+        "experiment",
+        "split test",
+        "split testing"
+      ],
+      "category": "method",
+      "evidence": []
+    },
+    {
+      "id": "prd",
+      "canonical": "PRDs / product requirements",
+      "synonyms": [
+        "prd",
+        "prds",
+        "product requirements",
+        "requirements document",
+        "requirements documents",
+        "product specs",
+        "product specifications"
+      ],
+      "category": "method",
+      "evidence": []
+    },
+    {
+      "id": "acceptance_criteria",
+      "canonical": "Acceptance criteria / user stories",
+      "synonyms": [
+        "acceptance criteria",
+        "user stories",
+        "user story",
+        "epics"
+      ],
+      "category": "method",
+      "evidence": []
+    },
+    {
+      "id": "uat",
+      "canonical": "UAT",
+      "synonyms": [
+        "uat",
+        "user acceptance testing",
+        "acceptance testing",
+        "dogfooding"
+      ],
+      "category": "method",
+      "evidence": []
+    },
+    {
+      "id": "roadmap",
+      "canonical": "Roadmap",
+      "synonyms": [
+        "roadmap",
+        "roadmaps",
+        "roadmapping",
+        "product roadmap"
+      ],
+      "category": "method",
+      "evidence": []
+    },
+    {
+      "id": "product_vision",
+      "canonical": "Product vision / strategy",
+      "synonyms": [
+        "product vision",
+        "product strategy",
+        "vision and strategy"
+      ],
+      "category": "method",
+      "evidence": []
+    },
+    {
+      "id": "prioritization",
+      "canonical": "Prioritization / trade-offs",
+      "synonyms": [
+        "prioritization",
+        "prioritisation",
+        "prioritize",
+        "prioritise",
+        "prioritizing",
+        "prioritising",
+        "trade-off",
+        "trade-offs",
+        "tradeoffs",
+        "trade off"
+      ],
+      "category": "method",
+      "evidence": [],
+      "soft": true
+    },
+    {
+      "id": "backlog",
+      "canonical": "Backlog management",
+      "synonyms": [
+        "backlog",
+        "backlogs",
+        "backlog grooming",
+        "backlog refinement"
+      ],
+      "category": "method",
+      "evidence": []
+    },
+    {
+      "id": "release_planning",
+      "canonical": "Release planning / launch",
+      "synonyms": [
+        "release planning",
+        "launch",
+        "launches",
+        "release management",
+        "go/no-go",
+        "go-live",
+        "rollout",
+        "rollouts",
+        "releases",
+        "release readiness"
+      ],
+      "category": "method",
+      "evidence": []
+    },
+    {
+      "id": "stakeholder_mgmt",
+      "canonical": "Stakeholder management",
+      "synonyms": [
+        "stakeholder management",
+        "stakeholders",
+        "stakeholder",
+        "without authority",
+        "without direct authority",
+        "cross-functional partners"
+      ],
+      "category": "skill",
+      "evidence": [],
+      "soft": true
+    },
+    {
+      "id": "metrics",
+      "canonical": "KPIs / success metrics",
+      "synonyms": [
+        "kpis",
+        "kpi",
+        "okrs",
+        "okr",
+        "success metrics",
+        "metrics",
+        "north star"
+      ],
+      "category": "method",
+      "evidence": [],
+      "soft": true
+    },
+    {
+      "id": "sql",
+      "canonical": "SQL",
+      "synonyms": [
+        "sql",
+        "structured query language"
+      ],
+      "category": "tool",
+      "evidence": []
+    },
+    {
+      "id": "python",
+      "canonical": "Python",
+      "synonyms": [
+        "python"
+      ],
+      "category": "tool",
+      "evidence": []
+    },
+    {
+      "id": "excel",
+      "canonical": "Excel",
+      "synonyms": [
+        "spreadsheets",
+        "spreadsheet"
+      ],
+      "caseSensitive": [
+        "Excel",
+        "MS Excel"
+      ],
+      "category": "tool",
+      "evidence": []
+    },
+    {
+      "id": "workflow_automation",
+      "canonical": "Workflow automation",
+      "synonyms": [
+        "workflow automation",
+        "automation",
+        "automate",
+        "automating",
+        "automated workflows"
+      ],
+      "category": "skill",
+      "evidence": []
+    },
+    {
+      "id": "data_analysis",
+      "canonical": "Data analysis / analytics",
+      "synonyms": [
+        "data analysis",
+        "analytics",
+        "data-driven",
+        "data driven",
+        "dashboards",
+        "data fluency",
+        "data-fluent"
+      ],
+      "category": "skill",
+      "evidence": [],
+      "soft": true
+    },
+    {
+      "id": "power_bi",
+      "canonical": "Power BI",
+      "synonyms": [
+        "power bi",
+        "powerbi"
+      ],
+      "category": "tool",
+      "evidence": []
+    },
+    {
+      "id": "tableau",
+      "canonical": "Tableau",
+      "synonyms": [
+        "tableau"
+      ],
+      "category": "tool",
+      "evidence": []
+    },
+    {
+      "id": "jira",
+      "canonical": "Jira / Confluence",
+      "synonyms": [
+        "jira",
+        "confluence"
+      ],
+      "category": "tool",
+      "evidence": []
+    },
+    {
+      "id": "figma",
+      "canonical": "Figma / wireframing",
+      "synonyms": [
+        "figma",
+        "wireframes",
+        "wireframing"
+      ],
+      "category": "tool",
+      "evidence": []
+    },
+    {
+      "id": "prototyping",
+      "canonical": "Prototyping / MVPs",
+      "synonyms": [
+        "prototyping",
+        "prototype",
+        "prototypes",
+        "mvp",
+        "mvps",
+        "proof of concept",
+        "proofs of concept"
+      ],
+      "category": "skill",
+      "evidence": []
+    },
+    {
+      "id": "ai_assisted_dev",
+      "canonical": "AI-assisted building",
+      "synonyms": [
+        "ai-assisted development",
+        "ai-assisted",
+        "ai coding tools",
+        "cursor",
+        "claude code",
+        "vibe coding",
+        "no-code",
+        "low-code",
+        "ai tools",
+        "build with ai"
+      ],
+      "category": "skill",
+      "evidence": []
+    },
+    {
+      "id": "llm_agents",
+      "canonical": "LLM / AI agents",
+      "synonyms": [
+        "llm",
+        "llms",
+        "large language model",
+        "large language models",
+        "ai agents",
+        "agents",
+        "agent",
+        "agentic",
+        "conversational ai",
+        "genai",
+        "gen ai",
+        "generative ai",
+        "chatbot",
+        "chatbots",
+        "co-pilots",
+        "co-pilot",
+        "copilots"
+      ],
+      "category": "skill",
+      "evidence": []
+    },
+    {
+      "id": "rag",
+      "canonical": "RAG / retrieval",
+      "synonyms": [
+        "rag",
+        "retrieval-augmented",
+        "retrieval augmented",
+        "retrieval",
+        "grounded answers",
+        "grounding"
+      ],
+      "category": "skill",
+      "evidence": []
+    },
+    {
+      "id": "ai_evaluation",
+      "canonical": "AI evaluation / evals",
+      "synonyms": [
+        "evaluation",
+        "evaluations",
+        "evals",
+        "eval harness",
+        "model evaluation",
+        "ai evaluation",
+        "quality bars",
+        "benchmark",
+        "benchmarking",
+        "held-out"
+      ],
+      "category": "skill",
+      "evidence": []
+    },
+    {
+      "id": "hallucination",
+      "canonical": "Hallucination / responsible AI",
+      "synonyms": [
+        "hallucination",
+        "hallucinations",
+        "responsible ai",
+        "guardrails",
+        "trust and safety",
+        "ai safety"
+      ],
+      "category": "skill",
+      "evidence": []
+    },
+    {
+      "id": "mcp",
+      "canonical": "MCP / tool integration",
+      "synonyms": [
+        "mcp",
+        "model context protocol",
+        "tool calling",
+        "tool use",
+        "tool integration"
+      ],
+      "category": "tool",
+      "evidence": []
+    },
+    {
+      "id": "ai_product",
+      "canonical": "AI products / ML",
+      "synonyms": [
+        "ai product",
+        "ai products",
+        "ai-powered",
+        "ai-first",
+        "applied ai",
+        "machine learning",
+        "ai/ml",
+        "ai-native",
+        "ai infrastructure"
+      ],
+      "category": "domain",
+      "evidence": []
+    },
+    {
+      "id": "prompt",
+      "canonical": "Prompt design",
+      "synonyms": [
+        "prompt engineering",
+        "prompt design",
+        "prompts",
+        "prompting"
+      ],
+      "category": "skill",
+      "evidence": []
+    },
+    {
+      "id": "zero_to_one",
+      "canonical": "0-to-1 building",
+      "synonyms": [
+        "0-to-1",
+        "0 to 1",
+        "zero to one",
+        "0→1",
+        "greenfield",
+        "from scratch",
+        "0-1"
+      ],
+      "category": "skill",
+      "evidence": []
+    },
+    {
+      "id": "apis",
+      "canonical": "APIs / integrations",
+      "synonyms": [
+        "apis",
+        "api",
+        "rest apis",
+        "integrations",
+        "integration",
+        "partner integrations",
+        "sdk"
+      ],
+      "category": "domain",
+      "evidence": []
+    },
+    {
+      "id": "webhooks",
+      "canonical": "Webhooks / event-driven",
+      "synonyms": [
+        "webhook",
+        "webhooks",
+        "event-driven",
+        "event driven",
+        "pub/sub",
+        "kafka"
+      ],
+      "category": "tool",
+      "evidence": []
+    },
+    {
+      "id": "hris",
+      "canonical": "HRIS",
+      "synonyms": [
+        "hris",
+        "hcm systems",
+        "workday",
+        "successfactors"
+      ],
+      "category": "tool",
+      "evidence": []
+    },
+    {
+      "id": "payroll",
+      "canonical": "Payroll domain",
+      "synonyms": [
+        "payroll"
+      ],
+      "category": "domain",
+      "evidence": []
+    },
+    {
+      "id": "payments",
+      "canonical": "Payments domain",
+      "synonyms": [
+        "payments",
+        "payment gateway",
+        "upi",
+        "card payments"
+      ],
+      "category": "domain",
+      "evidence": []
+    },
+    {
+      "id": "servicenow",
+      "canonical": "ServiceNow",
+      "synonyms": [
+        "servicenow"
+      ],
+      "category": "tool",
+      "evidence": []
+    },
+    {
+      "id": "sap",
+      "canonical": "SAP / ERP",
+      "synonyms": [
+        "erp",
+        "s/4 hana",
+        "s/4hana"
+      ],
+      "caseSensitive": [
+        "SAP"
+      ],
+      "category": "tool",
+      "evidence": []
+    },
+    {
+      "id": "rally",
+      "canonical": "Rally",
+      "synonyms": [],
+      "caseSensitive": [
+        "Rally"
+      ],
+      "category": "tool",
+      "evidence": []
+    },
+    {
+      "id": "gcp",
+      "canonical": "GCP",
+      "synonyms": [
+        "gcp",
+        "google cloud",
+        "google cloud platform"
+      ],
+      "category": "tool",
+      "evidence": []
+    },
+    {
+      "id": "bigquery",
+      "canonical": "BigQuery",
+      "synonyms": [
+        "bigquery",
+        "big query"
+      ],
+      "category": "tool",
+      "evidence": []
+    },
+    {
+      "id": "kubernetes",
+      "canonical": "Kubernetes / containers",
+      "synonyms": [
+        "kubernetes",
+        "k8s",
+        "docker",
+        "containers"
+      ],
+      "category": "tool",
+      "evidence": []
+    },
+    {
+      "id": "aws",
+      "canonical": "AWS / cloud",
+      "synonyms": [
+        "aws",
+        "amazon web services"
+      ],
+      "category": "tool",
+      "evidence": []
+    },
+    {
+      "id": "data_platform_tech",
+      "canonical": "Lakehouse / data mesh",
+      "synonyms": [
+        "lakehouse",
+        "data mesh",
+        "snowflake",
+        "databricks",
+        "data lake",
+        "data warehouse",
+        "federated architectures"
+      ],
+      "category": "tool",
+      "evidence": []
+    },
+    {
+      "id": "medallion",
+      "canonical": "Medallion architecture",
+      "synonyms": [
+        "medallion",
+        "bronze/silver/gold",
+        "bronze, silver, gold",
+        "gold layer"
+      ],
+      "category": "domain",
+      "evidence": []
+    },
+    {
+      "id": "identity_resolution",
+      "canonical": "Identity / entity resolution",
+      "synonyms": [
+        "identity resolution",
+        "entity resolution",
+        "householding",
+        "identity graph",
+        "match rates"
+      ],
+      "category": "domain",
+      "evidence": []
+    },
+    {
+      "id": "cdp",
+      "canonical": "CDP / customer 360",
+      "synonyms": [
+        "cdp",
+        "customer data platform",
+        "customer 360",
+        "customer360"
+      ],
+      "category": "domain",
+      "evidence": []
+    },
+    {
+      "id": "data_governance",
+      "canonical": "Data governance / lineage",
+      "synonyms": [
+        "data governance",
+        "lineage",
+        "data contracts",
+        "data catalog",
+        "certification of datasets"
+      ],
+      "category": "domain",
+      "evidence": []
+    },
+    {
+      "id": "data_quality",
+      "canonical": "Data quality / validation",
+      "synonyms": [
+        "data quality",
+        "data validation",
+        "reconciliation",
+        "quality monitoring"
+      ],
+      "category": "domain",
+      "evidence": []
+    },
+    {
+      "id": "data_modeling",
+      "canonical": "Data modelling / schemas",
+      "synonyms": [
+        "dimensional modelling",
+        "dimensional modeling",
+        "data modeling",
+        "data modelling",
+        "schemas",
+        "schema",
+        "semantic layer"
+      ],
+      "category": "domain",
+      "evidence": []
+    },
+    {
+      "id": "data_pipelines",
+      "canonical": "Data pipelines / data engineering",
+      "synonyms": [
+        "data pipelines",
+        "pipelines",
+        "etl",
+        "data engineering"
+      ],
+      "category": "domain",
+      "evidence": []
+    },
+    {
+      "id": "segmentation",
+      "canonical": "Segmentation / cohorts",
+      "synonyms": [
+        "segmentation",
+        "cohorts",
+        "cohort",
+        "personalisation",
+        "personalization",
+        "life-stage"
+      ],
+      "category": "method",
+      "evidence": []
+    },
+    {
+      "id": "martech",
+      "canonical": "MarTech / AdTech",
+      "synonyms": [
+        "martech",
+        "marketing technology",
+        "marketing platforms",
+        "marketing automation",
+        "adtech",
+        "retail media",
+        "crm"
+      ],
+      "category": "domain",
+      "evidence": []
+    },
+    {
+      "id": "whatsapp_voice",
+      "canonical": "WhatsApp / voice channels",
+      "synonyms": [
+        "whatsapp",
+        "voice",
+        "ivr",
+        "voice bots",
+        "rcs"
+      ],
+      "category": "domain",
+      "evidence": []
+    },
+    {
+      "id": "marketing_measurement",
+      "canonical": "Marketing measurement",
+      "synonyms": [
+        "attribution",
+        "mta",
+        "mmm",
+        "marketing mix",
+        "marketing measurement"
+      ],
+      "category": "domain",
+      "evidence": []
+    },
+    {
+      "id": "growth",
+      "canonical": "Growth / conversion",
+      "synonyms": [
+        "growth",
+        "conversion",
+        "funnel",
+        "funnels",
+        "activation",
+        "acquisition",
+        "retention"
+      ],
+      "category": "skill",
+      "evidence": [],
+      "soft": true
+    },
+    {
+      "id": "marketplace",
+      "canonical": "Marketplace / e-commerce",
+      "synonyms": [
+        "marketplace",
+        "marketplaces",
+        "sellers",
+        "seller",
+        "e-commerce",
+        "ecommerce",
+        "catalog",
+        "vendors"
+      ],
+      "category": "domain",
+      "evidence": []
+    },
+    {
+      "id": "category_mgmt",
+      "canonical": "Category management / assortment",
+      "synonyms": [
+        "category management",
+        "category manager",
+        "category growth",
+        "assortment",
+        "selection"
+      ],
+      "category": "domain",
+      "evidence": []
+    },
+    {
+      "id": "pricing",
+      "canonical": "Pricing",
+      "synonyms": [
+        "pricing",
+        "price points"
+      ],
+      "category": "domain",
+      "evidence": []
+    },
+    {
+      "id": "pnl",
+      "canonical": "P&L / profitability",
+      "synonyms": [
+        "p&l",
+        "profit and loss",
+        "profitability",
+        "ebit",
+        "gross margin"
+      ],
+      "category": "domain",
+      "evidence": [],
+      "redflag": true
+    },
+    {
+      "id": "npi",
+      "canonical": "Hardware / NPI",
+      "synonyms": [
+        "npi",
+        "new product introduction",
+        "hardware",
+        "notebooks",
+        "laptops"
+      ],
+      "category": "domain",
+      "evidence": []
+    },
+    {
+      "id": "tam_sizing",
+      "canonical": "Market sizing (TAM/SAM)",
+      "synonyms": [
+        "market sizing",
+        "unit economics",
+        "business case"
+      ],
+      "caseSensitive": [
+        "TAM",
+        "SAM",
+        "TAM/SAM"
+      ],
+      "category": "method",
+      "evidence": []
+    },
+    {
+      "id": "market_research",
+      "canonical": "Market / competitive research",
+      "synonyms": [
+        "market research",
+        "competitive analysis",
+        "competitor analysis",
+        "market analysis",
+        "competitive landscape"
+      ],
+      "category": "method",
+      "evidence": []
+    },
+    {
+      "id": "agile",
+      "canonical": "Agile / iterative delivery",
+      "synonyms": [
+        "agile",
+        "iterative delivery",
+        "sprints",
+        "sprint"
+      ],
+      "category": "method",
+      "evidence": []
+    },
+    {
+      "id": "scrum",
+      "canonical": "Scrum / Kanban",
+      "synonyms": [
+        "scrum",
+        "kanban",
+        "scrum master"
+      ],
+      "category": "method",
+      "evidence": []
+    },
+    {
+      "id": "safe",
+      "canonical": "SAFe",
+      "synonyms": [
+        "scaled agile",
+        "safe agile",
+        "safe framework"
+      ],
+      "caseSensitive": [
+        "SAFe"
+      ],
+      "category": "method",
+      "evidence": []
+    },
+    {
+      "id": "scrum_cert",
+      "canonical": "Scrum / CSPO / PMP certification",
+      "synonyms": [
+        "cspo",
+        "csm",
+        "psm",
+        "certified scrum",
+        "pmp",
+        "safe certification"
+      ],
+      "category": "cert",
+      "evidence": []
+    },
+    {
+      "id": "people_mgmt",
+      "canonical": "People management",
+      "synonyms": [
+        "people management",
+        "manage a team",
+        "team lead",
+        "direct reports",
+        "lead a team",
+        "people manager",
+        "people leadership"
+      ],
+      "category": "skill",
+      "evidence": [],
+      "redflag": true
+    },
+    {
+      "id": "quota",
+      "canonical": "Quota / revenue target",
+      "synonyms": [
+        "quota",
+        "revenue target",
+        "gmv target",
+        "sales target",
+        "hunting"
+      ],
+      "category": "domain",
+      "evidence": [],
+      "redflag": true
+    },
+    {
+      "id": "shift",
+      "canonical": "Shift work",
+      "synonyms": [
+        "24x7",
+        "24/7",
+        "night shift",
+        "rotational shift",
+        "us shift"
+      ],
+      "category": "domain",
+      "evidence": [],
+      "redflag": true
+    },
+    {
+      "id": "revenue_ownership",
+      "canonical": "Revenue ownership",
+      "synonyms": [
+        "revenue ownership",
+        "own revenue",
+        "owning revenue"
+      ],
+      "category": "domain",
+      "evidence": [],
+      "redflag": true
+    },
+    {
+      "id": "jbp",
+      "canonical": "Joint Business Planning",
+      "synonyms": [
+        "joint business planning",
+        "jbp"
+      ],
+      "category": "method",
+      "evidence": []
+    },
+    {
+      "id": "hr_tech",
+      "canonical": "HR tech / talent",
+      "synonyms": [
+        "hr tech",
+        "people tech",
+        "hr product",
+        "hr technology",
+        "talent",
+        "employee experience",
+        "workforce",
+        "recruiting",
+        "hiring"
+      ],
+      "category": "domain",
+      "evidence": []
+    },
+    {
+      "id": "knowledge_mgmt",
+      "canonical": "Knowledge / search / policy answers",
+      "synonyms": [
+        "knowledge base",
+        "knowledge management",
+        "knowledge platform",
+        "intranet",
+        "enterprise search",
+        "policy resolution",
+        "policy-resolution",
+        "sop"
+      ],
+      "category": "domain",
+      "evidence": []
+    },
+    {
+      "id": "b2b_saas",
+      "canonical": "B2B SaaS",
+      "synonyms": [
+        "b2b saas",
+        "saas",
+        "b2b",
+        "enterprise software"
+      ],
+      "category": "domain",
+      "evidence": []
+    },
+    {
+      "id": "customer_facing",
+      "canonical": "Customer-facing work",
+      "synonyms": [
+        "customer-facing",
+        "client-facing",
+        "customer facing",
+        "forward deployed",
+        "solutioning",
+        "pre-sales",
+        "customer engagements"
+      ],
+      "category": "skill",
+      "evidence": []
+    },
+    {
+      "id": "mobile_app",
+      "canonical": "Mobile apps",
+      "synonyms": [
+        "mobile app",
+        "mobile apps",
+        "ios",
+        "android",
+        "app store",
+        "mobile-app"
+      ],
+      "category": "domain",
+      "evidence": []
+    },
+    {
+      "id": "user_feedback",
+      "canonical": "User feedback",
+      "synonyms": [
+        "user feedback",
+        "customer feedback",
+        "feedback loops"
+      ],
+      "category": "method",
+      "evidence": [],
+      "soft": true
+    },
+    {
+      "id": "documentation",
+      "canonical": "Documentation / specs",
+      "synonyms": [
+        "documentation",
+        "specs",
+        "specifications",
+        "functional design",
+        "write specs"
+      ],
+      "category": "skill",
+      "evidence": [],
+      "soft": true
+    },
+    {
+      "id": "digital_product",
+      "canonical": "Digital products / transformation",
+      "synonyms": [
+        "digital transformation",
+        "digital products",
+        "digital product",
+        "digital solutions"
+      ],
+      "category": "domain",
+      "evidence": []
+    },
+    {
+      "id": "logistics",
+      "canonical": "Logistics / supply chain",
+      "synonyms": [
+        "logistics",
+        "supply chain",
+        "fulfillment",
+        "warehouse",
+        "replenishment"
+      ],
+      "category": "domain",
+      "evidence": []
+    },
+    {
+      "id": "mobility",
+      "canonical": "Mobility",
+      "synonyms": [
+        "mobility",
+        "ride-hailing",
+        "drivers and riders"
+      ],
+      "category": "domain",
+      "evidence": []
+    },
+    {
+      "id": "energy_chem",
+      "canonical": "Energy / chemicals",
+      "synonyms": [
+        "chemical",
+        "chemicals",
+        "energy",
+        "oil and gas",
+        "petrochemical"
+      ],
+      "category": "domain",
+      "evidence": []
+    },
+    {
+      "id": "retail",
+      "canonical": "Retail",
+      "synonyms": [
+        "retail",
+        "retailer",
+        "omnichannel"
+      ],
+      "category": "domain",
+      "evidence": []
+    },
+    {
+      "id": "startup",
+      "canonical": "Startup / high ownership",
+      "synonyms": [
+        "startup",
+        "start-up",
+        "fast-paced",
+        "ambiguity",
+        "high ownership",
+        "end to end",
+        "end-to-end"
+      ],
+      "category": "skill",
+      "evidence": [],
+      "soft": true
+    },
+    {
+      "id": "communication",
+      "canonical": "Communication",
+      "synonyms": [
+        "communication",
+        "communicate",
+        "storytelling",
+        "presentations",
+        "executive communication"
+      ],
+      "category": "skill",
+      "evidence": [],
+      "soft": true
+    },
+    {
+      "id": "problem_solving",
+      "canonical": "Problem solving / root cause",
+      "synonyms": [
+        "problem solving",
+        "problem-solving",
+        "first-principles",
+        "first principles",
+        "structured thinking",
+        "root cause",
+        "root-cause"
+      ],
+      "category": "skill",
+      "evidence": [],
+      "soft": true
+    },
+    {
+      "id": "strategy",
+      "canonical": "Strategy / GTM",
+      "synonyms": [
+        "strategy",
+        "strategic",
+        "go-to-market",
+        "gtm",
+        "business strategy"
+      ],
+      "category": "skill",
+      "evidence": [],
+      "soft": true
+    },
+    {
+      "id": "ux",
+      "canonical": "UX / user experience",
+      "synonyms": [
+        "ux",
+        "user experience",
+        "design thinking",
+        "usability"
+      ],
+      "category": "skill",
+      "evidence": []
+    },
+    {
+      "id": "brand_partners",
+      "canonical": "Brand / partner management",
+      "synonyms": [
+        "brand partners",
+        "brands",
+        "partner management",
+        "vendor management",
+        "business reviews"
+      ],
+      "category": "skill",
+      "evidence": []
+    },
+    {
+      "id": "qa_triage",
+      "canonical": "QA / defect triage",
+      "synonyms": [
+        "defect triage",
+        "defect tracking",
+        "quality assurance",
+        "bug triage",
+        "qa"
+      ],
+      "category": "method",
+      "evidence": []
+    }
+  ]
+}

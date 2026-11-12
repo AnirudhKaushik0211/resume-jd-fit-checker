@@ -1,0 +1,1157 @@
+{
+  "_comment": "Screening methodology: directions, level rules, gates, red flags, checklist parsing, scoring weights and thresholds.",
+  "applyThreshold": 75,
+  "threshold": {
+    "_comment": "Strictness. Default T = applyThreshold. Apply when fit >= T; tailor band = T-tailorBand..T-1; skip below. UI slider uses min/max/step.",
+    "min": 40,
+    "max": 95,
+    "step": 5,
+    "tailorBand": 20
+  },
+  "directions": {
+    "target": [
+      {
+        "id": "founders_office",
+        "label": "Founder's office / strategy",
+        "titlePhrases": [
+          "founder's office",
+          "founders office",
+          "founder office",
+          "chief of staff",
+          "strategy and operations associate",
+          "business strategy"
+        ],
+        "bodyPhrases": [
+          "founder's office",
+          "founders office",
+          "work directly with the founders",
+          "work with the founders",
+          "strategic initiatives"
+        ]
+      },
+      {
+        "id": "po",
+        "label": "Product Owner",
+        "titlePhrases": [
+          "product owner"
+        ],
+        "bodyPhrases": [
+          "product owner",
+          "backlog",
+          "user stories"
+        ]
+      },
+      {
+        "id": "apm",
+        "label": "Associate PM",
+        "titlePhrases": [
+          "associate product manager",
+          "apm",
+          "product associate",
+          "associate pm"
+        ],
+        "bodyPhrases": [
+          "associate product manager"
+        ]
+      },
+      {
+        "id": "ai_pm",
+        "label": "AI PM / AI product builder",
+        "titlePhrases": [
+          "ai product manager",
+          "ai product",
+          "ai pm",
+          "product engineer",
+          "applied ai",
+          "ai product engineer"
+        ],
+        "bodyPhrases": [
+          "llm",
+          "agents",
+          "agentic",
+          "ai-powered",
+          "evaluation",
+          "genai",
+          "generative ai"
+        ]
+      },
+      {
+        "id": "pm",
+        "label": "Product Manager",
+        "titlePhrases": [
+          "product manager",
+          "product management",
+          "pm i",
+          "pm ii",
+          "digital product",
+          "product lead"
+        ],
+        "bodyPhrases": [
+          "roadmap",
+          "product vision",
+          "product discovery",
+          "prd",
+          "own the what",
+          "0-to-1",
+          "trade-off",
+          "product strategy"
+        ]
+      },
+      {
+        "id": "category_marketing",
+        "secondary": true,
+        "label": "Category / marketing (secondary)",
+        "titlePhrases": [
+          "category manager",
+          "category marketing",
+          "marketing manager",
+          "brand manager",
+          "category development",
+          "ecommerce growth"
+        ],
+        "bodyPhrases": [
+          "category growth",
+          "assortment",
+          "brand partners",
+          "go-to-market"
+        ]
+      }
+    ],
+    "closingCompatible": [
+      [
+        "pm",
+        "apm",
+        "ai_pm"
+      ],
+      [
+        "po"
+      ],
+      [
+        "founders_office"
+      ],
+      [
+        "category_marketing"
+      ]
+    ],
+    "avoid": [
+      {
+        "id": "ops",
+        "action": "skip",
+        "label": "ops-heavy / PMO / product-ops",
+        "titlePhrases": [
+          "program operations",
+          "pmo",
+          "operations manager",
+          "delivery manager",
+          "product operations",
+          "product ops",
+          "project manager"
+        ],
+        "phrases": [
+          "pmo",
+          "program operations",
+          "sla adherence",
+          "manual audits",
+          "maintain processes",
+          "escalate",
+          "under guidance",
+          "release governance",
+          "scorecards",
+          "voc reporting",
+          "voice of customer reporting",
+          "product operations",
+          "product ops",
+          "operational reporting",
+          "defect tracking"
+        ],
+        "minHits": 3
+      },
+      {
+        "id": "people_manager",
+        "action": "skip",
+        "label": "people-manager role",
+        "titlePhrases": [
+          "people leader",
+          "engineering manager"
+        ],
+        "phrases": [
+          "manage a team",
+          "people manager",
+          "lead a team of",
+          "direct reports",
+          "team management",
+          "people leadership",
+          "manage and mentor a team"
+        ],
+        "minHits": 1,
+        "override": true
+      },
+      {
+        "id": "quota_sales",
+        "action": "skip",
+        "label": "quota sales / BD",
+        "titlePhrases": [
+          "account executive",
+          "sales manager",
+          "business development",
+          "sales"
+        ],
+        "phrases": [
+          "quota",
+          "hunting",
+          "pipeline generation",
+          "revenue target",
+          "gmv target",
+          "account executive",
+          "business development",
+          "sales target",
+          "new logos"
+        ],
+        "minHits": 2
+      },
+      {
+        "id": "ads_operator",
+        "action": "skip",
+        "label": "ads operator / performance marketing",
+        "titlePhrases": [
+          "performance marketing",
+          "paid media",
+          "ppc",
+          "sem specialist",
+          "digital marketing executive"
+        ],
+        "phrases": [
+          "ppc",
+          "paid media",
+          "performance marketing",
+          "campaign management",
+          "bid management",
+          "hands-on paid",
+          "paid social",
+          "media buying"
+        ],
+        "minHits": 2
+      },
+      {
+        "id": "deep_vertical",
+        "action": "skip_if_required",
+        "label": "deep-vertical domain",
+        "titlePhrases": [],
+        "phrases": [
+          "medical device",
+          "medical devices",
+          "pharma",
+          "pharmaceutical",
+          "hydraulic",
+          "hydraulics",
+          "chemical",
+          "chemicals",
+          "petrochemical",
+          "telecom",
+          "lending",
+          "credit risk",
+          "erisa",
+          "hipaa",
+          "benefits administration",
+          "capital markets",
+          "prime brokerage",
+          "automotive hardware"
+        ]
+      },
+      {
+        "id": "analyst_support",
+        "action": "hold",
+        "label": "analyst / BA / product-ops support seat",
+        "titlePhrases": [
+          "business analyst",
+          "product analyst",
+          "data analyst",
+          "product support",
+          "reporting analyst",
+          "analytics analyst"
+        ],
+        "phrases": []
+      },
+      {
+        "id": "field_activation",
+        "action": "skip",
+        "label": "field / consumer activation",
+        "titlePhrases": [
+          "field marketing",
+          "activation"
+        ],
+        "phrases": [
+          "field marketing",
+          "consumer activation",
+          "on-ground activation",
+          "btl activation"
+        ],
+        "minHits": 1
+      },
+      {
+        "id": "merch_plm",
+        "action": "skip",
+        "label": "merchandising / PLM",
+        "titlePhrases": [
+          "merchandiser",
+          "merchandising",
+          "plm"
+        ],
+        "phrases": [
+          "merchandise planning",
+          "plm",
+          "buying and merchandising",
+          "line planning"
+        ],
+        "minHits": 2
+      }
+    ],
+    "avoidMinScore": 3,
+    "titleWeight": 3,
+    "bodyWeight": 1
+  },
+  "level": {
+    "seniorTitleWords": [
+      "senior",
+      "sr",
+      "staff",
+      "principal",
+      "lead",
+      "head",
+      "director",
+      "vp",
+      "vice president",
+      "gm",
+      "dgm",
+      "general manager",
+      "avp",
+      "chief",
+      "advanced"
+    ],
+    "okMaxMinYears": 4,
+    "tooSeniorMinYears": 5,
+    "pmSpecificPattern": "product management|product manager|as a pm|\\bpm\\b|digital product|product owner|product role",
+    "mbaPathPattern": "(\\d+)\\s*(?:-|–|to)?\\s*(\\d+)?\\s*\\+?\\s*(?:years|yrs)[^.]{0,30}(?:with|post|after)\\s+(?:an\\s+)?mba",
+    "bodySeniorPattern": "\\b(senior|sr\\.?|staff|principal) (product manager|pm)\\b|\\bas a senior( (product manager|pm))?\\b"
+  },
+  "hardPlatforms": [
+    "sap",
+    "s/4 hana",
+    "s/4hana",
+    "erp",
+    "servicenow",
+    "successfactors",
+    "adp",
+    "salesforce admin",
+    "shopify",
+    "oracle fusion",
+    "workday",
+    "safe"
+  ],
+  "toolGates": [
+    {
+      "id": "sql",
+      "label": "SQL",
+      "phrases": [
+        "sql"
+      ]
+    },
+    {
+      "id": "python",
+      "label": "Python",
+      "phrases": [
+        "python"
+      ]
+    },
+    {
+      "id": "excel",
+      "label": "Excel",
+      "phrases": [
+        "excel",
+        "spreadsheets"
+      ]
+    },
+    {
+      "id": "power bi",
+      "label": "Power BI",
+      "phrases": [
+        "power bi",
+        "powerbi"
+      ]
+    },
+    {
+      "id": "tableau",
+      "label": "Tableau",
+      "phrases": [
+        "tableau"
+      ]
+    },
+    {
+      "id": "jira",
+      "label": "Jira",
+      "phrases": [
+        "jira"
+      ]
+    },
+    {
+      "id": "gcp",
+      "label": "GCP",
+      "phrases": [
+        "gcp",
+        "google cloud"
+      ]
+    },
+    {
+      "id": "bigquery",
+      "label": "BigQuery",
+      "phrases": [
+        "bigquery",
+        "big query"
+      ]
+    },
+    {
+      "id": "kubernetes",
+      "label": "Kubernetes",
+      "phrases": [
+        "kubernetes",
+        "k8s"
+      ]
+    },
+    {
+      "id": "hris",
+      "label": "HRIS",
+      "phrases": [
+        "hris"
+      ]
+    },
+    {
+      "id": "servicenow",
+      "label": "ServiceNow",
+      "phrases": [
+        "servicenow"
+      ]
+    },
+    {
+      "id": "figma",
+      "label": "Figma",
+      "phrases": [
+        "figma"
+      ]
+    },
+    {
+      "id": "rally",
+      "label": "Rally",
+      "phrases": [
+        "rally"
+      ],
+      "caseSensitive": true
+    },
+    {
+      "id": "sap",
+      "label": "SAP",
+      "phrases": [
+        "SAP",
+        "S/4 HANA",
+        "S/4HANA"
+      ],
+      "caseSensitive": true
+    },
+    {
+      "id": "snowflake",
+      "label": "Snowflake",
+      "phrases": [
+        "snowflake"
+      ]
+    },
+    {
+      "id": "databricks",
+      "label": "Databricks",
+      "phrases": [
+        "databricks"
+      ]
+    },
+    {
+      "id": "looker",
+      "label": "Looker",
+      "phrases": [
+        "looker"
+      ]
+    },
+    {
+      "id": "workday",
+      "label": "Workday",
+      "phrases": [
+        "workday"
+      ]
+    },
+    {
+      "id": "successfactors",
+      "label": "SuccessFactors",
+      "phrases": [
+        "successfactors"
+      ]
+    },
+    {
+      "id": "salesforce",
+      "label": "Salesforce",
+      "phrases": [
+        "salesforce"
+      ]
+    },
+    {
+      "id": "aws",
+      "label": "AWS",
+      "phrases": [
+        "aws"
+      ]
+    },
+    {
+      "id": "react",
+      "label": "React",
+      "phrases": [
+        "react"
+      ],
+      "caseSensitive": true
+    },
+    {
+      "id": "java",
+      "label": "Java",
+      "phrases": [
+        "java"
+      ],
+      "caseSensitive": false
+    },
+    {
+      "id": "safe",
+      "label": "SAFe / scaled agile",
+      "phrases": [
+        "SAFe",
+        "Scaled Agile",
+        "scaled agile"
+      ],
+      "caseSensitive": true
+    }
+  ],
+  "domainGates": [
+    {
+      "id": "payments",
+      "label": "Payments",
+      "phrases": [
+        "payments",
+        "payment gateway",
+        "fintech payments"
+      ]
+    },
+    {
+      "id": "payroll",
+      "label": "Payroll",
+      "phrases": [
+        "payroll"
+      ]
+    },
+    {
+      "id": "hr_tech",
+      "label": "HR tech / people tech",
+      "phrases": [
+        "hr tech",
+        "people tech",
+        "hr product",
+        "hr technology",
+        "hcm",
+        "hr systems"
+      ]
+    },
+    {
+      "id": "banking",
+      "label": "Banking / lending",
+      "phrases": [
+        "banking",
+        "lending",
+        "credit",
+        "wealth management"
+      ]
+    },
+    {
+      "id": "identity_cdp",
+      "label": "Identity / CDP / customer data",
+      "phrases": [
+        "identity resolution",
+        "cdp",
+        "customer 360",
+        "customer data platform",
+        "householding",
+        "household data"
+      ]
+    },
+    {
+      "id": "martech",
+      "label": "MarTech / AdTech / retail media",
+      "phrases": [
+        "martech",
+        "adtech",
+        "retail media",
+        "marketing technology",
+        "marketing platforms"
+      ]
+    },
+    {
+      "id": "data_platform",
+      "label": "Data platforms",
+      "phrases": [
+        "data platform",
+        "data platforms",
+        "data products",
+        "lakehouse",
+        "data mesh"
+      ]
+    },
+    {
+      "id": "b2b_saas",
+      "label": "B2B SaaS",
+      "phrases": [
+        "b2b saas",
+        "saas"
+      ]
+    },
+    {
+      "id": "mobile_app",
+      "label": "Mobile apps",
+      "phrases": [
+        "mobile app",
+        "mobile apps",
+        "mobile-app",
+        "ios and android"
+      ]
+    },
+    {
+      "id": "hardware",
+      "label": "Hardware / consumer electronics",
+      "phrases": [
+        "hardware",
+        "npi",
+        "consumer electronics",
+        "notebooks",
+        "pc industry"
+      ]
+    },
+    {
+      "id": "energy_chemicals",
+      "label": "Energy / chemicals",
+      "phrases": [
+        "chemical",
+        "chemicals",
+        "energy industry",
+        "oil and gas",
+        "petrochemical"
+      ]
+    },
+    {
+      "id": "healthcare",
+      "label": "Healthcare / medical",
+      "phrases": [
+        "healthcare",
+        "medical device",
+        "medical devices",
+        "pharma",
+        "clinical"
+      ]
+    },
+    {
+      "id": "telecom",
+      "label": "Telecom",
+      "phrases": [
+        "telecom",
+        "telecommunications"
+      ]
+    },
+    {
+      "id": "marketplace",
+      "label": "Marketplace / e-commerce",
+      "phrases": [
+        "marketplace",
+        "e-commerce",
+        "ecommerce",
+        "sellers"
+      ]
+    },
+    {
+      "id": "ai_evaluation",
+      "label": "AI / LLM products",
+      "phrases": [
+        "llm",
+        "genai",
+        "generative ai",
+        "agentic",
+        "ai agents",
+        "ai products"
+      ]
+    },
+    {
+      "id": "logistics",
+      "label": "Logistics / supply chain",
+      "phrases": [
+        "logistics",
+        "supply chain",
+        "warehouse"
+      ]
+    },
+    {
+      "id": "conversational_channels",
+      "label": "WhatsApp / voice channels",
+      "phrases": [
+        "whatsapp",
+        "voice bots",
+        "voice agents",
+        "ivr"
+      ]
+    },
+    {
+      "id": "pricing_profit",
+      "label": "Pricing / profitability ownership",
+      "phrases": [
+        "pricing",
+        "profitability",
+        "p&l",
+        "gross margin"
+      ]
+    }
+  ],
+  "certPatterns": [
+    {
+      "id": "scrum",
+      "label": "Scrum / CSPO / PSM / SAFe / PMP",
+      "pattern": "cspo|\\bcsm\\b|\\bpsm\\b|scrum (master|product owner)? ?certif|certified scrum|safe (agilist|certif)|\\bpmp\\b",
+      "status": "not_met"
+    }
+  ],
+  "education": {
+    "tierListPattern": "iim\\s*[a-z](\\s*/\\s*[a-z]){2,}|iim[s]? (a|b|c|l|i|k)\\b|tier[- ]?1 (institute|b-school|college)|top[- ]tier (institute|b-school)|iit/iim|premier institute",
+    "mbaPattern": "\\bmba\\b|pgdm|post[- ]graduate (degree|diploma) in management",
+    "bachelorPattern": "bachelor|b\\.?tech|b\\.?e\\.?\\b|undergraduate degree|engineering degree",
+    "csDegreePattern": "computer science|\\bcs\\b degree|b\\.?tech in cs",
+    "gpaPattern": "(\\d+(?:\\.\\d+)?)\\s*\\+?\\s*(?:/\\s*(\\d+))?\\s*(?:cgpa|gpa)|(?:cgpa|gpa)\\s*(?:of|>=|above)?\\s*(\\d+(?:\\.\\d+)?)"
+  },
+  "locations": {
+    "cities": [
+      "bangalore",
+      "bengaluru",
+      "mumbai",
+      "delhi",
+      "new delhi",
+      "gurugram",
+      "gurgaon",
+      "noida",
+      "hyderabad",
+      "pune",
+      "chennai",
+      "kolkata",
+      "ahmedabad",
+      "london",
+      "singapore",
+      "dubai",
+      "seattle",
+      "san francisco",
+      "new york"
+    ],
+    "remotePhrases": [
+      "remote",
+      "work from home",
+      "wfh"
+    ],
+    "relocationPhrases": [
+      "relocation required",
+      "must relocate",
+      "willing to relocate"
+    ],
+    "shiftPhrases": [
+      "24x7",
+      "24/7",
+      "night shift",
+      "rotational shift",
+      "us shift",
+      "us overlap",
+      "1-10pm",
+      "uk shift",
+      "emea shift"
+    ],
+    "onsitePhrases": [
+      "5 days onsite",
+      "fully onsite",
+      "work from office 5 days"
+    ]
+  },
+  "languages": [
+    "german",
+    "french",
+    "japanese",
+    "spanish",
+    "mandarin",
+    "korean",
+    "arabic",
+    "portuguese",
+    "italian",
+    "dutch",
+    "kannada",
+    "tamil",
+    "telugu",
+    "marathi",
+    "bengali",
+    "hindi"
+  ],
+  "redFlags": [
+    {
+      "id": "quota",
+      "label": "Quota / revenue target",
+      "phrases": [
+        "quota",
+        "revenue target",
+        "gmv target",
+        "sales target"
+      ]
+    },
+    {
+      "id": "pnl",
+      "label": "P&L ownership",
+      "phrases": [
+        "p&l ownership",
+        "p&l",
+        "ebit",
+        "profit and loss"
+      ]
+    },
+    {
+      "id": "people",
+      "label": "People management",
+      "phrases": [
+        "people management",
+        "manage a team",
+        "direct reports",
+        "lead a team of"
+      ]
+    },
+    {
+      "id": "shift",
+      "label": "Shift / odd hours",
+      "phrases": [
+        "24x7",
+        "24/7",
+        "night shift",
+        "rotational shift",
+        "us shift",
+        "us overlap"
+      ]
+    },
+    {
+      "id": "onsite",
+      "label": "Strict onsite / relocation",
+      "phrases": [
+        "5 days onsite",
+        "relocation required",
+        "must relocate"
+      ]
+    },
+    {
+      "id": "pricing",
+      "label": "Pricing ownership",
+      "phrases": [
+        "pricing ownership",
+        "own pricing",
+        "pricing strategy"
+      ]
+    }
+  ],
+  "skipWords": [
+    "Senior",
+    "Staff",
+    "Principal",
+    "Lead",
+    "Head",
+    "Director",
+    "Sales",
+    "Account Executive",
+    "merchandising",
+    "PLM",
+    "operations",
+    "PMO"
+  ],
+  "checklist": {
+    "labelStatus": [
+      [
+        "pending job",
+        "pending"
+      ],
+      [
+        "repeat",
+        "repeat"
+      ],
+      [
+        "unconfirmed",
+        "pending"
+      ],
+      [
+        "not applied",
+        "skipped"
+      ],
+      [
+        "applied",
+        "applied"
+      ],
+      [
+        "skip",
+        "skipped"
+      ],
+      [
+        "dropped",
+        "skipped"
+      ],
+      [
+        "held",
+        "held"
+      ],
+      [
+        "parked",
+        "held"
+      ],
+      [
+        "tailoring",
+        "pending"
+      ],
+      [
+        "tailored",
+        "pending"
+      ],
+      [
+        "awaiting",
+        "pending"
+      ],
+      [
+        "pending",
+        "pending"
+      ],
+      [
+        "reuse",
+        "pending"
+      ],
+      [
+        "recommended",
+        "pending"
+      ],
+      [
+        "in progress",
+        "pending"
+      ]
+    ],
+    "ignoreLabels": [
+      "pattern",
+      "process rule",
+      "linkedin skip words",
+      "not a factor",
+      "cleaned",
+      "cleanups",
+      "cleaning",
+      "open",
+      "work samples added",
+      "clause added",
+      "interview note",
+      "exception",
+      "tell",
+      "signals",
+      "resume"
+    ],
+    "commaSplitSections": [
+      "proven examples"
+    ],
+    "sameRoleMinScore": 0.6,
+    "abbreviations": {
+      "pm": "product manager",
+      "apm": "associate product manager",
+      "po": "product owner",
+      "fo": "founders office",
+      "fde": "forward deployed engineer",
+      "sr": "senior",
+      "mgr": "manager",
+      "pmi": "product manager i"
+    },
+    "genericRoleWords": [
+      "product",
+      "manager",
+      "management",
+      "associate",
+      "senior",
+      "digital",
+      "team",
+      "role",
+      "lead",
+      "owner",
+      "ii",
+      "iii"
+    ],
+    "roleStopWords": [
+      "and",
+      "of",
+      "the",
+      "for",
+      "at",
+      "in",
+      "a",
+      "an",
+      "to",
+      "with",
+      "as",
+      "on",
+      "&"
+    ]
+  },
+  "scoring": {
+    "weights": {
+      "gates": 0.4,
+      "responsibilities": 0.3,
+      "niceToHave": 0.05,
+      "direction": 0.1,
+      "level": 0.15
+    },
+    "gateValues": {
+      "met": 1,
+      "partial": 0.4,
+      "unknown": 0.5,
+      "not_met": 0
+    },
+    "requiredGateWeight": 3,
+    "preferredGateWeight": 1,
+    "noGatesDefault": 0.7,
+    "keywordValues": {
+      "matched": 1,
+      "supportable": 0.4,
+      "unsupported": 0,
+      "redflag": 0
+    },
+    "noPreferredDefault": 0.5,
+    "directionValues": {
+      "target": 1,
+      "secondary": 0.7,
+      "neutral": 0.7,
+      "avoid": 0.7
+    },
+    "levelValues": {
+      "ok": 1,
+      "stretch": 0.4,
+      "too_senior": 0.1,
+      "unknown": 0.7
+    },
+    "redFlagPenalty": 4,
+    "redFlagPenaltyCap": 12,
+    "deepVerticalPreferredPenalty": 8,
+    "keywordCategoryWeights": {
+      "domain": 2,
+      "tool": 1.5,
+      "cert": 1.5,
+      "method": 1,
+      "skill": 1
+    },
+    "softKeywordWeight": 0.5,
+    "transferDiscount": 0.2
+  },
+  "baseRanking": {
+    "familyWeight": 0.6,
+    "keywordWeight": 0.4,
+    "familyHitsForFull": 4,
+    "titleHitWeight": 2
+  },
+  "tailor": {
+    "maxClosingLengthDelta": 20,
+    "closingRoleLabels": {
+      "founders_office": "Founder's Office or product role",
+      "pm": "Product Manager role",
+      "apm": "Associate Product Manager role",
+      "ai_pm": "AI Product Manager role",
+      "po": "Product Owner role",
+      "category_marketing": "category or marketing role"
+    },
+    "domainPhrases": [
+      {
+        "id": "llm_agents",
+        "phrase": "at an AI company building agentic systems"
+      },
+      {
+        "id": "knowledge_mgmt",
+        "phrase": "on knowledge and employee-experience platforms"
+      },
+      {
+        "id": "hr_tech",
+        "phrase": "in HR and people tech"
+      },
+      {
+        "id": "martech",
+        "phrase": "in marketing technology"
+      },
+      {
+        "id": "data_governance",
+        "phrase": "on trusted data products"
+      },
+      {
+        "id": "payments",
+        "phrase": "in payments"
+      },
+      {
+        "id": "mobility",
+        "phrase": "in mobility"
+      },
+      {
+        "id": "logistics",
+        "phrase": "in logistics"
+      },
+      {
+        "id": "marketplace",
+        "phrase": "in marketplaces"
+      },
+      {
+        "id": "ai_product",
+        "phrase": "building AI products"
+      },
+      {
+        "id": "retail",
+        "phrase": "in retail"
+      }
+    ],
+    "closingThemes": [
+      {
+        "id": "product_discovery",
+        "phrase": "evidence-led discovery and evaluation"
+      },
+      {
+        "id": "ai_evaluation",
+        "phrase": "agent building and evaluation"
+      },
+      {
+        "id": "llm_agents",
+        "phrase": "agent building and evaluation"
+      },
+      {
+        "id": "data_quality",
+        "phrase": "data validation and evaluation"
+      }
+    ]
+  },
+  "repost": {
+    "similarity": 0.8,
+    "shingleSize": 5
+  },
+  "generation": {
+    "_comment": "Generated resumes are always NEW files in the resume folder; sources are never edited in place.",
+    "targetPattern": "{prefix}{roleCode}_{company}_{short}",
+    "timeoutSeconds": 180,
+    "roleCodes": {
+      "po": "PO",
+      "apm": "APM",
+      "founders_office": "FO",
+      "category_marketing": "ACM",
+      "ai_pm": "PM",
+      "pm": "PM"
+    }
+  },
+  "repo": {
+    "_comment": "Nearest-neighbour recency: within tieWindow points prefer the most recently modified; stale bases lose stalePenalty points.",
+    "tieWindow": 5,
+    "stalePenalty": 3
+  }
+}

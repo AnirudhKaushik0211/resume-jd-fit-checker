@@ -1,0 +1,32 @@
+{
+  "_comment": "Demo bases (synthetic). swapSlots/closingSentence text must match the resumes built by scripts\\build-demo.cjs exactly once.",
+  "bases": [
+    {
+      "name": "PM_BASE_General",
+      "family": "Product management (consumer / e-commerce)",
+      "familyKeywords": ["product manager", "product management", "consumer", "e-commerce", "ecommerce", "checkout", "roadmap", "discovery", "experimentation", "a/b", "growth", "conversion"],
+      "closingSentence": "Seeking a Product Manager role building consumer products.",
+      "closingRoleType": "pm",
+      "closingDomainTerms": ["consumer"],
+      "swapSlots": [{ "old": "Tools: Trello, Confluence", "keep": "Confluence" }]
+    },
+    {
+      "name": "PM_Fintech_Payments",
+      "family": "Product management (payments / fintech)",
+      "familyKeywords": ["payments", "payment", "fintech", "upi", "cards", "payment gateway", "checkout", "transactions", "product manager", "wallet"],
+      "closingSentence": "Seeking a Product Manager role in payments.",
+      "closingRoleType": "pm",
+      "closingDomainTerms": ["payments"],
+      "swapSlots": [{ "old": "Tools: Trello, Confluence", "keep": "Confluence" }]
+    },
+    {
+      "name": "Ops_BASE_Analytics",
+      "family": "Operations / analytics",
+      "familyKeywords": ["analyst", "analytics", "supply chain", "operations", "logistics", "warehouse", "reporting", "dashboards", "insights"],
+      "closingSentence": "Seeking an analytics role in supply chain operations.",
+      "closingRoleType": null,
+      "closingDomainTerms": ["supply chain"],
+      "swapSlots": [{ "old": "Tools: Excel, Looker Studio", "keep": "Looker Studio" }]
+    }
+  ]
+}

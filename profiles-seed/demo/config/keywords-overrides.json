@@ -1,0 +1,11 @@
+{
+  "_comment": "Demo links onto the default taxonomy: evidence ids per keyword (evidence items also declare their own keywords) and forbidden-claim ids.",
+  "links": {
+    "growth": { "evidence": ["checkout-experiments"] },
+    "user_research": { "evidence": ["discovery-interviews"] },
+    "people_mgmt": { "forbidden": "people-mgmt" },
+    "pnl": { "forbidden": "pnl-ownership" },
+    "revenue_ownership": { "forbidden": "pnl-ownership" }
+  },
+  "add": []
+}

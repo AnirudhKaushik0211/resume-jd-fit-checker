@@ -1,0 +1,29 @@
+{
+  "_comment": "Candidate facts for this profile. Start empty; fill in from your own resumes (onboarding drafts these for you). Only claims you can back up belong here.",
+  "name": "",
+  "totalYears": 0,
+  "hasPmTitle": false,
+  "employer": "",
+  "currentRole": "",
+  "location": "",
+  "locationAliases": [],
+  "languages": [],
+  "gpa": null,
+  "education": [],
+  "certifications": [],
+  "tools": {},
+  "domains": {},
+  "evidence": [],
+  "workSamples": [],
+  "forbiddenClaims": [],
+  "bridges": {},
+  "probes": [],
+  "followUpTemplate": "Hi {name}, I applied for the {role} role at {company} earlier and noticed it again. I'm still very interested: {hook}. Happy to share a short work sample if useful.",
+  "whyRoleTemplates": {
+    "opening": "I want the {role} role at {company} because it matches work I have already done.",
+    "evidenceSentence": "At {employer}, I {claim}.",
+    "closing": "I'd bring the same ownership to {company}: start from the user's problem, set a clear quality bar, and ship in small, measurable steps."
+  },
+  "userEvidenceFile": "evidence-added.json",
+  "honestyMode": "generic"
+}

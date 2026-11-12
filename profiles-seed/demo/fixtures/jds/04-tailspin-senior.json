@@ -1,0 +1,33 @@
+{
+  "id": "tailspin-senior",
+  "company": "Tailspin Toys",
+  "title": "Senior Product Manager, Platform",
+  "logged": "Synthetic demo JD. Expected values were set from the first run of the tool on 2026-11 after a plausibility check (not a real historical judgment). Too senior: 8+ years and people management for a ~4-year candidate.",
+  "expected": {
+    "historicalVerdict": "skip",
+    "historicalFit": 35,
+    "rankGroup": 3,
+    "verdictAtT55": [
+      "skip"
+    ],
+    "flags": {
+      "level": "too_senior",
+      "levelSeniorWord": true,
+      "directionClass": "avoid",
+      "alwaysSkip": true
+    }
+  },
+  "lines": [
+    "Senior Product Manager, Platform",
+    "Company: Tailspin Toys",
+    "Location: Bengaluru",
+    "Responsibilities",
+    "- Set the multi-year product vision and roadmap for our commerce platform.",
+    "- Manage a team of 4 product managers.",
+    "- Own platform APIs used by partner teams.",
+    "Requirements",
+    "- 8+ years of product management experience.",
+    "- Experience leading platform products at scale.",
+    "- Strong SQL and data analysis."
+  ]
+}

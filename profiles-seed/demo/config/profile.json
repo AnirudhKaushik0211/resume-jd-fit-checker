@@ -1,0 +1,112 @@
+{
+  "_comment": "Demo profile: a FICTIONAL candidate (no real person, employer or school). Shows the tool on a small, realistic repository.",
+  "name": "Casey Sample",
+  "totalYears": 4,
+  "hasPmTitle": true,
+  "employer": "Brightwater Commerce",
+  "currentRole": "Associate Product Manager",
+  "location": "Bengaluru",
+  "locationAliases": ["bengaluru", "bangalore"],
+  "languages": ["english", "hindi"],
+  "gpa": null,
+  "education": [
+    { "id": "mba", "degree": "MBA", "school": "Northgate School of Management", "tier": "other", "notes": "general management" },
+    { "id": "bsc", "degree": "B.Sc.", "field": "Statistics", "school": "Riverton State University" }
+  ],
+  "certifications": [
+    { "id": "google-analytics", "name": "Google Analytics certification", "aliases": ["google analytics", "ga4"] },
+    { "id": "tableau-specialist", "name": "Tableau Desktop Specialist", "aliases": ["tableau desktop specialist", "tableau certification"] }
+  ],
+  "tools": {
+    "sql": "met", "excel": "met", "python": "met", "tableau": "met", "jira": "met",
+    "figma": "partial", "power bi": "partial", "looker": "partial", "bigquery": "partial", "aws": "partial",
+    "gcp": "not_met", "kubernetes": "not_met", "hris": "not_met", "servicenow": "not_met", "rally": "not_met",
+    "sap": "not_met", "snowflake": "not_met", "databricks": "not_met", "workday": "not_met", "successfactors": "not_met",
+    "salesforce": "not_met", "react": "not_met", "java": "not_met", "safe": "not_met"
+  },
+  "domains": {
+    "marketplace": "met", "payments": "met", "logistics": "partial", "data_platform": "partial", "mobile_app": "partial",
+    "b2b_saas": "partial", "pricing_profit": "partial", "ai_evaluation": "not_met", "martech": "not_met", "hr_tech": "not_met",
+    "payroll": "not_met", "banking": "not_met", "identity_cdp": "not_met", "hardware": "not_met", "energy_chemicals": "not_met",
+    "healthcare": "not_met", "telecom": "not_met", "conversational_channels": "not_met"
+  },
+  "evidence": [
+    {
+      "id": "python-automation", "dateAdded": "2024-11-01",
+      "claim": "Automated shipment reports in Python and Excel, saving 10 hrs per week.",
+      "brief": "automated weekly shipment reports in Python and Excel", "theme": "automation",
+      "detect": "Automated shipment reports", "keywords": ["python", "excel", "workflow_automation"]
+    },
+    {
+      "id": "supply-chain-analysis", "dateAdded": "2024-10-01",
+      "claim": "Analysed supply chain data for 5 warehouses with stakeholders in operations.",
+      "brief": "analysed supply chain data across 5 warehouses", "theme": "operations analytics",
+      "detect": "supply chain data", "keywords": ["logistics", "data_analysis", "stakeholder_mgmt"], "appliesTo": ["Operations"]
+    },
+    {
+      "id": "prd-roadmap", "dateAdded": "2025-01-10",
+      "claim": "Owned the checkout roadmap and wrote PRDs with acceptance criteria for 3 squads.",
+      "brief": "owned the checkout roadmap and wrote PRDs for 3 squads", "theme": "product ownership",
+      "detect": "checkout roadmap", "keywords": ["roadmap", "prd", "acceptance_criteria"]
+    },
+    {
+      "id": "checkout-experiments", "dateAdded": "2025-01-15",
+      "claim": "Ran 12 A/B tests on checkout and shipped guest checkout, lifting conversion 6%.",
+      "brief": "ran 12 checkout A/B tests and shipped guest checkout", "theme": "experimentation",
+      "detect": "guest checkout", "skillLabel": "A/B testing", "keywords": ["experimentation", "metrics"]
+    },
+    {
+      "id": "discovery-interviews", "dateAdded": "2025-02-01",
+      "claim": "Ran product discovery with 40 customer interviews and prioritized the backlog in Jira.",
+      "brief": "ran product discovery with 40 customer interviews", "theme": "discovery",
+      "detect": "40 customer interviews", "keywords": ["product_discovery", "customer_discovery_interviews", "backlog", "prioritization", "jira"]
+    },
+    {
+      "id": "sql-dashboards", "dateAdded": "2025-03-01",
+      "claim": "Built SQL dashboards in Tableau used in weekly business reviews.",
+      "brief": "built SQL dashboards in Tableau for weekly business reviews", "theme": "analytics",
+      "detect": "SQL dashboards", "skillLabel": "SQL dashboards", "keywords": ["sql", "tableau", "data_analysis"]
+    },
+    {
+      "id": "payment-retries", "dateAdded": "2025-09-01",
+      "claim": "Launched UPI payment retries with the gateway team, cutting failed payments 8%.",
+      "brief": "launched UPI payment retries that cut failed payments 8%", "theme": "payments",
+      "detect": "payment retries", "keywords": ["payments"], "appliesTo": ["payments"]
+    },
+    {
+      "id": "mixpanel-funnels", "dateAdded": "2026-05-01",
+      "claim": "Set up Mixpanel funnels for the checkout team to track drop-off by step.",
+      "brief": "set up Mixpanel funnels to track checkout drop-off", "theme": "product analytics",
+      "detect": "Mixpanel", "skillLabel": "Mixpanel funnels", "keywords": ["metrics"]
+    },
+    {
+      "id": "figma-prototyping", "dateAdded": "2026-08-01",
+      "claim": "Prototyped the new checkout flow in Figma and tested it with 8 users before build.",
+      "brief": "prototyped a checkout flow in Figma and tested it with 8 users", "theme": "prototyping",
+      "detect": "Figma", "skillLabel": "Figma prototyping", "keywords": ["figma", "prototyping"]
+    }
+  ],
+  "workSamples": [],
+  "forbiddenClaims": [
+    { "id": "people-mgmt", "pattern": "people manag|team lead|led a team|managed a team|direct reports|manage a team", "message": "No people management: the demo candidate has never managed a team." },
+    { "id": "pnl-ownership", "pattern": "\\bp&l\\b|profit and loss|owned (the )?revenue", "message": "No P&L or revenue ownership." },
+    { "id": "scrum-cert", "pattern": "certified scrum|\\bcspo\\b|\\bpsm\\b|\\bpmp\\b|scrum master certif", "message": "No Scrum / CSPO / PMP certification." }
+  ],
+  "bridges": {
+    "payments": "Point to the UPI payment-retry launch and how you would ramp up on cards and settlements.",
+    "martech": "Say plainly you have not run lifecycle campaigns; offer the checkout experiments as the closest work."
+  },
+  "probes": [
+    { "id": "people-lead", "when": "keyword:people_mgmt", "question": "Have you managed people?", "bridge": "No direct reports; I coordinated 3 squads through PRDs and reviews." },
+    { "id": "metrics-story", "when": "always", "question": "Tell us about an experiment that changed your roadmap.", "bridge": "Guest checkout: 12 A/B tests, +6% conversion, then reprioritized the backlog." },
+    { "id": "discovery-story", "when": "always", "question": "How do you run discovery?", "bridge": "40 customer interviews, a clustered problem list, then a prioritized backlog in Jira." }
+  ],
+  "followUpTemplate": "Hi {name}, I applied for the {role} role at {company} earlier and noticed it again. I'm still very interested: {hook}. Happy to share a short work sample if useful.",
+  "whyRoleTemplates": {
+    "opening": "I want the {role} role at {company} because it matches work I have already done.",
+    "evidenceSentence": "At {employer}, I {claim}.",
+    "closing": "I'd bring the same ownership to {company}: start from the user's problem, set a clear quality bar, and ship in small, measurable steps."
+  },
+  "userEvidenceFile": "evidence-added.json",
+  "honestyMode": "generic"
+}
