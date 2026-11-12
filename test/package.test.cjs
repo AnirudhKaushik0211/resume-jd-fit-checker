@@ -65,6 +65,14 @@ test('packaged copy scans clean and its server serves the demo and onboarding on
     for (const f of ['server.cjs', 'index.html', 'README.md', 'lib/profiles.cjs', 'defaults/rules.json', 'profiles-seed/demo/profile.meta.json', 'profiles-seed/_template/profile.meta.json', 'scripts/package-public.cjs']) {
       assert.ok(fs.existsSync(path.join(out, f)), `${f} shipped`);
     }
+    // Double-click launchers ship byte-identical: CRLF for the Windows .cmd, LF only for the bash launchers.
+    for (const [f, crlf] of [['Start JD Fit Checker.cmd', true], ['Start JD Fit Checker.command', false], ['start.sh', false]]) {
+      const shipped = fs.readFileSync(path.join(out, f));
+      assert.ok(shipped.equals(fs.readFileSync(path.join(__dirname, '..', f))), `${f} shipped unchanged`);
+      const text = shipped.toString('latin1');
+      if (crlf) assert.equal(/(^|[^\r])\n/.test(text), false, `${f} has CRLF line endings only`);
+      else assert.equal(text.includes('\r'), false, `${f} has LF line endings only`);
+    }
     for (const f of ['scripts/migrate-owner.cjs', 'scripts/e2e-generate.cjs', 'scripts/templates', 'config', 'data', 'dist']) {
       assert.equal(fs.existsSync(path.join(out, f)), false, `${f} not shipped`);
     }

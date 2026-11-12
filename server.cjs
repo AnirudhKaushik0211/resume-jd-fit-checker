@@ -523,11 +523,38 @@ function createServer() {
 if (require.main === module) {
   try { if (profiles.ensureDemo()) console.log('Installed the demo profile (synthetic data).'); } catch (error) { console.log(`Demo profile not installed: ${error.message}`); }
   const server = createServer();
-  server.listen(PORT, HOST, () => {
+  const announce = (port) => {
     const list = profiles.listProfiles();
-    console.log(`JD Fit Checker running at http://${HOST}:${PORT}  (profile store: ${profiles.jdfcHome()})`);
+    console.log(`JD Fit Checker running at http://${HOST}:${port}  (profile store: ${profiles.jdfcHome()})`);
     console.log(`  profiles: ${list.length ? list.map((p) => `${p.id}${p.protected ? ' (protected)' : ''}`).join(', ') : 'none yet'}`);
-  });
+  };
+  if (process.env.JDFC_LAUNCHER === '1') {
+    // Double-click launchers: next free port if PORT is busy, "already running" detection, browser opens itself
+    // (JDFC_NO_BROWSER=1 skips the browser, for tests).
+    const launch = require('./lib/launch.cjs');
+    const browse = (url) => { if (process.env.JDFC_NO_BROWSER !== '1') launch.openBrowser(url); };
+    launch.listenWithFallback(server, { port: PORT, host: HOST, beforeListen: setPort }).then(({ port, alreadyRunning, skipped }) => {
+      const url = `http://${HOST}:${port}/`;
+      if (alreadyRunning) {
+        console.log(`JD Fit Checker is already running at ${url} (opening it in your browser).`);
+        console.log('Nothing new was started. You can close this window; use the window where it is already running to stop it.');
+        browse(url);
+        setTimeout(() => process.exit(0), 300);
+        return;
+      }
+      announce(port);
+      if (skipped.length) console.log(`  ${skipped.length > 1 ? 'Ports' : 'Port'} ${skipped.join(', ')} ${skipped.length > 1 ? 'are' : 'is'} used by another program, so port ${port} is used instead.`);
+      console.log('');
+      console.log(`JD Fit Checker is running at http://${HOST}:${port} . Keep this window open while you use it. Close this window (or press Ctrl+C) to stop.`);
+      browse(url);
+      process.on('SIGINT', () => { console.log('Stopping JD Fit Checker.'); process.exit(0); });
+    }).catch((error) => {
+      console.error(`JD Fit Checker could not start: ${error.message}`);
+      process.exit(1);
+    });
+  } else {
+    server.listen(PORT, HOST, () => announce(PORT));
+  }
 }
 
 module.exports = { createServer, setPort, reloadProfile, dropProfile, ROUTES, HOST, PORT };

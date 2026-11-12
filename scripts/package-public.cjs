@@ -3,7 +3,7 @@
 // Builds the public (shareable) copy of the tool: an allow-list copy plus a forward-slash .zip.
 // Usage (from jd-fit-checker): node scripts\package-public.cjs [--out <dir>]
 //   default <TOOL>\dist\jd-fit-checker-public\ and <TOOL>\dist\jd-fit-checker-public.zip (zip = <out>.zip)
-// Ships: server.cjs, index.html, README.md, lib\**, defaults\**, profiles-seed\** (demo + _template), test\** (generic),
+// Ships: server.cjs, index.html, README.md, the double-click launchers, lib\**, defaults\**, profiles-seed\** (demo + _template), test\** (generic),
 // scripts\*.cjs except migrate-owner.cjs and e2e-generate.cjs (owner workflow); never scripts\templates\**.
 // Refuses (exit 1, output removed) on: any deny-list hit, any file byte-identical to a file in a non-demo profile store
 // (under jdfcHome() and the default home), any path segment _pre_profiles_backup / config / data (outside
@@ -19,7 +19,8 @@ const { writeZip } = require('../lib/docx-write.cjs');
 const { listZipEntries } = require('../lib/docx.cjs');
 const { jdfcHome, TOOL_DIR, SEED_DIR } = require('../lib/profiles.cjs');
 
-const ROOT_FILES = ['server.cjs', 'index.html', 'README.md'];
+// Launchers ship byte-for-byte (copyFileSync + zip of the raw bytes): CRLF .cmd, LF .command / .sh.
+const ROOT_FILES = ['server.cjs', 'index.html', 'README.md', 'Start JD Fit Checker.cmd', 'Start JD Fit Checker.command', 'start.sh'];
 const TREES = ['lib', 'defaults', 'profiles-seed', 'test'];
 const SCRIPT_EXCLUDE = new Set(['migrate-owner.cjs', 'e2e-generate.cjs']);
 const BAD_SEGMENTS = ['_pre_profiles_backup', 'dist', 'tests'];
