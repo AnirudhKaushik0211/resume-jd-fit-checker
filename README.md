@@ -9,9 +9,9 @@ Check a job description against your own resumes and get an honest, explainable 
 
 Your resumes never leave your computer. The only outbound request the tool makes is fetching a job-posting URL that you type in yourself.
 
-![JD Fit Checker on the Demo profile: the Check a JD results with the Apply as-is verdict, baseline fit 98% against threshold 75%, direction and level checks, and the must-have gates table](docs/screenshot.png)
+![JD Fit Checker on the Demo profile: the Check a JD results with a Tailor (salvage) verdict, baseline fit 65%, 72% after honest edits, threshold 75% and a 3-point gap, the gaps that editing cannot honestly close, and the direction and level checks](docs/screenshot.png)
 
-*A sample job description checked against the fictional Demo profile: verdict first, then every check behind it.*
+*Example: a salvage verdict on the fictional Demo profile. Honest edits lift the fit from 65% to 72%, still 3 points below the 75% threshold, so the tool shows the gap and leaves the call to you.*
 
 ## Quick start (no typing needed)
 

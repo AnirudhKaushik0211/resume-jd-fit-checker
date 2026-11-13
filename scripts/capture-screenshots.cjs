@@ -139,7 +139,8 @@ async function main() {
   if (!(await waitFor(async () => (await request('GET', '/api/health')).status === 200, 15000))) throw new Error(`server did not start:\n${serverLog}`);
   const c = await request('POST', '/api/profiles', LOCKED);
   if (c.status >= 300) throw new Error(`could not create ${LOCKED.id}: ${c.status} ${c.text}`);
-  const jd = JSON.parse(fs.readFileSync(path.join(TOOL, 'profiles-seed', 'demo', 'fixtures', 'jds', '01-litware-checkout.json'), 'utf8')).lines.join('\n');
+  // A realistic salvage case (baseline below T, honest edits help but a gap remains), not a near-perfect match.
+  const jd = JSON.parse(fs.readFileSync(path.join(TOOL, 'profiles-seed', 'demo', 'fixtures', 'jds', '02-northwind-growth.json'), 'utf8')).lines.join('\n');
 
   const b = await openEdge();
   const { cdp, evaluate } = b;
